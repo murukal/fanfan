@@ -16,5 +16,7 @@ export type NavigationMetadata = NavigationProp<{
       }
     | undefined;
 
+  Billings: undefined;
+
   Billing: undefined;
 }>;

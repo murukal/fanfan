@@ -1,5 +1,5 @@
 import {useQuery} from '@apollo/client';
-import {ScrollView, View} from 'react-native';
+import {SafeAreaView, ScrollView, View} from 'react-native';
 import {BILLINGS, createBilling} from '../../apis/billing';
 import React from 'react';
 import {BillingCard} from '../../components/Billing';
@@ -95,22 +95,28 @@ const Billings = () => {
   };
 
   return (
-    <ScrollView>
-      {data?.billings.map(item => renderBilling(item))}
-
-      <Button
-        icon="plus"
-        mode="contained"
-        onPress={onCreateBilling}
-        contentStyle={{
-          height: 56,
-        }}
+    <SafeAreaView>
+      <ScrollView
         style={{
-          borderRadius: 999,
+          paddingHorizontal: 20,
+          marginVertical: 20,
         }}>
-        添 加 账 本
-      </Button>
-    </ScrollView>
+        {data?.billings.map(item => renderBilling(item))}
+
+        <Button
+          icon="plus"
+          mode="contained"
+          onPress={onCreateBilling}
+          contentStyle={{
+            height: 56,
+          }}
+          style={{
+            borderRadius: 999,
+          }}>
+          添 加 账 本
+        </Button>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

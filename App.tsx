@@ -20,7 +20,6 @@ import {ApolloProvider} from '@apollo/client';
 import client from './src/apis';
 import {Provider, useSelector} from 'react-redux';
 import {State, store} from './src/redux';
-import {SafeAreaView} from 'react-native';
 
 import {
   NavigationContainer,
@@ -34,6 +33,7 @@ import {
 
 import merge from 'deepmerge';
 import Billing from './src/pages/Billing';
+import Billings from './src/pages/Billings';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -63,36 +63,40 @@ const Routes = () => {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-      }}>
-      <NavigationContainer theme={CombinedDefaultTheme}>
-        <Stack.Navigator
-          screenOptions={() => ({
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          })}
-          initialRouteName={Layout.name}>
-          <Stack.Screen
-            name={Layout.name}
-            component={Layout}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name={Account.name} component={Account} />
-          <Stack.Screen
-            name={Billing.name}
-            component={Billing}
-            options={{
-              title: '账本',
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <NavigationContainer theme={CombinedDefaultTheme}>
+      <Stack.Navigator
+        screenOptions={() => ({
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        })}
+        initialRouteName={Layout.name}>
+        <Stack.Screen
+          name={Layout.name}
+          component={Layout}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen name={Account.name} component={Account} />
+
+        <Stack.Screen
+          name={Billings.name}
+          component={Billings}
+          options={{
+            title: '我的账本',
+          }}
+        />
+
+        <Stack.Screen
+          name={Billing.name}
+          component={Billing}
+          options={{
+            title: '账本',
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

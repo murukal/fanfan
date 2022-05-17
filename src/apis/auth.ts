@@ -20,6 +20,7 @@ const WHO_AM_I: TypedDocumentNode<{
       moneyProfile {
         defaultBilling {
           id
+          name
         }
       }
     }
