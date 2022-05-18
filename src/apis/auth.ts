@@ -3,7 +3,7 @@ import {gql} from '@apollo/client';
 import type {TypedDocumentNode} from '@apollo/client';
 // project
 import {fetcher} from '.';
-import type {LoginInput, User} from '../typings/auth';
+import type {LoginInput, RegisterInput, User} from '../typings/auth';
 
 /**
  * 获取用户信息
@@ -55,5 +55,29 @@ export const login = (loginInput: LoginInput) =>
     mutation: LOGIN,
     variables: {
       loginInput,
+    },
+  });
+
+/**
+ * 注册
+ */
+const REGISTER: TypedDocumentNode<
+  {
+    register: string;
+  },
+  {
+    registerInput: RegisterInput;
+  }
+> = gql`
+  mutation Register($registerInput: RegisterInput!) {
+    register(registerInput: $registerInput)
+  }
+`;
+
+export const register = (registerInput: RegisterInput) =>
+  fetcher.mutate({
+    mutation: REGISTER,
+    variables: {
+      registerInput,
     },
   });

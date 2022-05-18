@@ -1,12 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {StyleSheet, View} from 'react-native';
-import {Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {
+  NativeSyntheticEvent,
+  StyleSheet,
+  TextInputChangeEventData,
+  View,
+} from 'react-native';
+import {
+  Button,
+  HelperText,
+  Text,
+  TextInput,
+  useTheme,
+} from 'react-native-paper';
 import {NavigationMetadata} from '../../typings/navigation';
+import {register} from '../../apis/auth';
+import {reinitialize} from '../../utils';
 
 const Register = () => {
   const navigation = useNavigation<NavigationMetadata>();
   const theme = useTheme();
+  const [error, setError] = useState<string>('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
 
   /**
    * 前往登录
@@ -15,6 +33,52 @@ const Register = () => {
     navigation.navigate('Account', {
       screen: 'Login',
     });
+  };
+
+  /**
+   * 登录
+   */
+  const onRegister = async () => {
+    const result = await register({
+      username,
+      email,
+      password,
+    });
+
+    if (!result.data) {
+      setError(result.errors?.find(() => true)?.message || '');
+      return;
+    }
+
+    reinitialize(result.data.register, true);
+  };
+
+  /**
+   * 变更
+   */
+  const onUsernameChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    setError('');
+    setUsername(e.nativeEvent.text);
+  };
+
+  const onEmailChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    setError('');
+    setEmail(e.nativeEvent.text);
+  };
+
+  const onPasswordChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    setError('');
+    setPassword(e.nativeEvent.text);
+  };
+  const onRepeatPasswordChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    setError('');
+    setRepeatPassword(e.nativeEvent.text);
   };
 
   return (
@@ -32,45 +96,69 @@ const Register = () => {
         <Text style={styles.title}>Account</Text>
       </View>
 
-      {/* 登录form */}
       <View>
         <TextInput
           autoFocus={true}
+          value={username}
           mode="outlined"
-          label="用户名/邮箱"
-          placeholder="请输入用户名/邮箱"
-          style={{
-            marginBottom: 16,
-          }}
+          label="用户名"
+          placeholder="请输入用户名"
+          onChange={onUsernameChange}
+          error={!!error}
         />
+
+        <HelperText type="error" visible={!!error} padding="none">
+          {error}
+        </HelperText>
 
         <TextInput
           mode="outlined"
+          value={email}
+          label="邮箱"
+          placeholder="请输入邮箱"
+          onChange={onEmailChange}
+          error={!!error}
+        />
+
+        <HelperText type="error" visible={!!error} padding="none">
+          {error}
+        </HelperText>
+
+        <TextInput
+          mode="outlined"
+          value={password}
+          textContentType="password"
           label="密码"
           placeholder="请输入密码"
-          style={{
-            marginBottom: 16,
-          }}
+          onChange={onPasswordChange}
+          error={!!error}
         />
+
+        <HelperText type="error" visible={!!error} padding="none">
+          {error}
+        </HelperText>
 
         <TextInput
           mode="outlined"
+          value={repeatPassword}
           label="二次确认密码"
           placeholder="请输入二次确认密码"
-          style={{
-            marginBottom: 16,
-          }}
+          onChange={onRepeatPasswordChange}
+          error={!!error}
         />
+
+        <HelperText type="error" visible={!!error} padding="none">
+          {error}
+        </HelperText>
 
         <Button
           mode="contained"
-          onPress={() => console.log('Pressed')}
+          onPress={onRegister}
           contentStyle={{
             height: 56,
           }}
           style={{
             borderRadius: 9999,
-            marginBottom: 16,
           }}>
           注 册
         </Button>

@@ -14,3 +14,9 @@ export interface LoginInput {
   keyword: string;
   password: string;
 }
+
+export interface RegisterInput {
+  username: string;
+  email: string;
+  password: string;
+}

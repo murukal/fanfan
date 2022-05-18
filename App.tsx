@@ -36,6 +36,7 @@ import Billing from './src/pages/Billing';
 import Billings from './src/pages/Billings';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Transaction from './src/pages/Transaction';
 
 MaterialCommunityIcons.loadFont();
 
@@ -93,6 +94,14 @@ const Routes = () => {
           component={Billing}
           options={{
             title: '账本',
+          }}
+        />
+
+        <Stack.Screen
+          name={Transaction.name}
+          component={Transaction}
+          options={{
+            title: '交易',
           }}
         />
       </Stack.Navigator>

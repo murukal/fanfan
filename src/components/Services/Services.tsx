@@ -11,7 +11,7 @@ const Services = () => {
     {
       title: '新建交易',
       onPress: () => {
-        console.log('12321');
+        navigation.navigate('Transaction');
       },
     },
     {

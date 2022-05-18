@@ -7,7 +7,14 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
-import {Text, TextInput, Button, useTheme, Checkbox} from 'react-native-paper';
+import {
+  Text,
+  TextInput,
+  Button,
+  useTheme,
+  Checkbox,
+  HelperText,
+} from 'react-native-paper';
 import {login} from '../../apis/auth';
 import {NavigationMetadata} from '../../typings/navigation';
 import {reinitialize} from '../../utils';
@@ -18,6 +25,7 @@ const Login = () => {
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
   const [isAutoLogin, setIsAutoLogin] = useState(false);
+  const [error, setError] = useState<string>('');
 
   /**
    * 前往注册
@@ -34,6 +42,7 @@ const Login = () => {
   const onKeywordChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
+    setError('');
     setKeyword(e.nativeEvent.text);
   };
 
@@ -43,6 +52,7 @@ const Login = () => {
   const onPasswordChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
+    setError('');
     setPassword(e.nativeEvent.text);
   };
 
@@ -63,6 +73,7 @@ const Login = () => {
     });
 
     if (!result.data) {
+      setError(result.errors?.find(() => true)?.message || '');
       return;
     }
 
@@ -93,10 +104,12 @@ const Login = () => {
           mode="outlined"
           label="用户名/邮箱"
           placeholder="请输入用户名/邮箱"
-          style={{
-            marginBottom: 16,
-          }}
+          error={!!error}
         />
+
+        <HelperText type="error" visible={!!error} padding="none">
+          {error}
+        </HelperText>
 
         <TextInput
           value={password}
@@ -104,10 +117,12 @@ const Login = () => {
           mode="outlined"
           label="密码"
           placeholder="请输入密码"
-          style={{
-            marginBottom: 16,
-          }}
+          error={!!error}
         />
+
+        <HelperText type="error" visible={!!error} padding="none">
+          {error}
+        </HelperText>
 
         <View
           style={{
@@ -131,7 +146,7 @@ const Login = () => {
             height: 56,
           }}
           style={{
-            marginBottom: 16,
+            marginBottom: 64,
             borderRadius: 9999,
           }}>
           登 录
