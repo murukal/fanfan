@@ -105,6 +105,9 @@ const Login = () => {
           label="用户名/邮箱"
           placeholder="请输入用户名/邮箱"
           error={!!error}
+          theme={{
+            roundness: 28,
+          }}
         />
 
         <HelperText type="error" visible={!!error} padding="none">
@@ -118,6 +121,10 @@ const Login = () => {
           label="密码"
           placeholder="请输入密码"
           error={!!error}
+          secureTextEntry
+          theme={{
+            roundness: 28,
+          }}
         />
 
         <HelperText type="error" visible={!!error} padding="none">
@@ -126,7 +133,7 @@ const Login = () => {
 
         <View
           style={{
-            marginBottom: 16,
+            marginBottom: 8,
             flexDirection: 'row',
             alignItems: 'center',
           }}>

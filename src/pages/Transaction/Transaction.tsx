@@ -1,10 +1,14 @@
 import {TextInput} from 'react-native-paper';
 import React from 'react';
 import {SafeAreaView, ScrollView} from 'react-native';
+import Picker from '../../components/Picker';
 
 const Transaction = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}>
       <ScrollView
         style={{
           padding: 20,
@@ -22,6 +26,10 @@ const Transaction = () => {
           }}
         />
       </ScrollView>
+
+      <Picker>
+        <TextInput />
+      </Picker>
     </SafeAreaView>
   );
 };

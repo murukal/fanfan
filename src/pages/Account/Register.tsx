@@ -105,6 +105,9 @@ const Register = () => {
           placeholder="请输入用户名"
           onChange={onUsernameChange}
           error={!!error}
+          theme={{
+            roundness: 28,
+          }}
         />
 
         <HelperText type="error" visible={!!error} padding="none">
@@ -118,6 +121,9 @@ const Register = () => {
           placeholder="请输入邮箱"
           onChange={onEmailChange}
           error={!!error}
+          theme={{
+            roundness: 28,
+          }}
         />
 
         <HelperText type="error" visible={!!error} padding="none">
@@ -132,6 +138,10 @@ const Register = () => {
           placeholder="请输入密码"
           onChange={onPasswordChange}
           error={!!error}
+          secureTextEntry
+          theme={{
+            roundness: 28,
+          }}
         />
 
         <HelperText type="error" visible={!!error} padding="none">
@@ -145,6 +155,10 @@ const Register = () => {
           placeholder="请输入二次确认密码"
           onChange={onRepeatPasswordChange}
           error={!!error}
+          secureTextEntry
+          theme={{
+            roundness: 28,
+          }}
         />
 
         <HelperText type="error" visible={!!error} padding="none">
