@@ -1,7 +1,7 @@
-import { ReactNode } from 'react'
+import {ReactElement} from 'react';
 
-export { default } from './Picker'
+export {default} from './Picker';
 
 export interface Props {
-  children: ReactNode
+  children: ReactElement;
 }

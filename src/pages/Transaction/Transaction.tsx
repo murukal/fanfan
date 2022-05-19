@@ -28,7 +28,7 @@ const Transaction = () => {
       </ScrollView>
 
       <Picker>
-        <TextInput />
+        <TextInput>This is rendered at a different place</TextInput>
       </Picker>
     </SafeAreaView>
   );
