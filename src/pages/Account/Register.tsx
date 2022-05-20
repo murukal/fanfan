@@ -133,7 +133,6 @@ const Register = () => {
         <TextInput
           mode="outlined"
           value={password}
-          textContentType="password"
           label="密码"
           placeholder="请输入密码"
           onChange={onPasswordChange}
