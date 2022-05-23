@@ -7,17 +7,11 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
-import {
-  Text,
-  TextInput,
-  Button,
-  useTheme,
-  Checkbox,
-  HelperText,
-} from 'react-native-paper';
+import {Text, TextInput, Button, useTheme, Checkbox} from 'react-native-paper';
 import {login} from '../../apis/auth';
 import {NavigationMetadata} from '../../typings/navigation';
 import {reinitialize} from '../../utils';
+import {notify} from '../../redux/app';
 
 const Login = () => {
   const navigation = useNavigation<NavigationMetadata>();
@@ -25,7 +19,6 @@ const Login = () => {
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
   const [isAutoLogin, setIsAutoLogin] = useState(false);
-  const [error, setError] = useState<string>('');
 
   /**
    * 前往注册
@@ -42,7 +35,6 @@ const Login = () => {
   const onKeywordChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
-    setError('');
     setKeyword(e.nativeEvent.text);
   };
 
@@ -52,7 +44,6 @@ const Login = () => {
   const onPasswordChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
-    setError('');
     setPassword(e.nativeEvent.text);
   };
 
@@ -73,7 +64,10 @@ const Login = () => {
     });
 
     if (!result.data) {
-      setError(result.errors?.find(() => true)?.message || '');
+      notify({
+        type: 'error',
+        message: result.errors?.find(() => true)?.message || '',
+      });
       return;
     }
 
@@ -104,15 +98,10 @@ const Login = () => {
           mode="outlined"
           label="用户名/邮箱"
           placeholder="请输入用户名/邮箱"
-          error={!!error}
           theme={{
             roundness: 28,
           }}
         />
-
-        <HelperText type="error" visible={!!error} padding="none">
-          {error}
-        </HelperText>
 
         <TextInput
           value={password}
@@ -120,16 +109,11 @@ const Login = () => {
           mode="outlined"
           label="密码"
           placeholder="请输入密码"
-          error={!!error}
           secureTextEntry
           theme={{
             roundness: 28,
           }}
         />
-
-        <HelperText type="error" visible={!!error} padding="none">
-          {error}
-        </HelperText>
 
         <View
           style={{

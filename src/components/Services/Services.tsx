@@ -2,16 +2,28 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, Pressable, View} from 'react-native';
 import {Text, Title} from 'react-native-paper';
+import {useSelector} from 'react-redux';
+import {State} from '../../redux';
 import {NavigationMetadata} from '../../typings/navigation';
 
 const Services = () => {
   const navigation = useNavigation<NavigationMetadata>();
+  const billingId = useSelector<State, number | undefined>(
+    state => state.userProfile.user?.moneyProfile.defaultBilling.id,
+  );
 
   const services = [
     {
       title: '新建交易',
       onPress: () => {
-        navigation.navigate('Transaction');
+        // 未设置默认账本
+        if (!billingId) {
+          return;
+        }
+
+        navigation.navigate('Transaction', {
+          billingId,
+        });
       },
     },
     {

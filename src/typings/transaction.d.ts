@@ -1,8 +1,12 @@
 export interface Transaction {
   id: number;
-  name: string;
-  belongTo: number;
-  category: number;
-  createdBy: number;
-  createdAt: string;
+  billingId: number;
+  categoryId: number;
+  amount: number;
 }
+
+export interface CreateTransactionInput
+  extends Pick<Transaction, 'billingId' | 'categoryId' | 'amount'> {}
+
+export interface UpdateTransactionInput
+  extends Omit<CreateTransactionInput, 'billingId'> {}

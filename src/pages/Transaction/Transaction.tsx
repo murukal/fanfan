@@ -1,9 +1,7 @@
 import {
   ActivityIndicator,
-  Avatar,
   Button,
   Chip,
-  IconButton,
   Text,
   TextInput,
   Title,
@@ -12,10 +10,12 @@ import {
 import React from 'react';
 import {
   FlatList,
+  NativeSyntheticEvent,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   TextInput as NativeTextInput,
+  TextInputChangeEventData,
   View,
 } from 'react-native';
 import {useState} from 'react';
@@ -23,7 +23,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useQuery} from '@apollo/client';
 import {CATEGORIES} from '../../apis/category';
 import {Category} from '../../typings/category';
-import {useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {NavigationMetadata, TransactionProp} from '../../typings/navigation';
+import {create, update} from '../../apis/transaction';
+import {notify} from '../../redux/app';
+import {useDispatch} from 'react-redux';
 
 const directions = {
   in: '收入',
@@ -32,10 +36,11 @@ const directions = {
 
 const Transaction = () => {
   const [direction, setDirection] = useState<keyof typeof directions>('out');
-  const [categoryId, setCategoryId] = useState<number>();
-  const route = useRoute();
-
-  console.log('route===', route.params);
+  const [categoryId, setCategoryId] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(0);
+  const route = useRoute<RouteProp<{params: TransactionProp}>>();
+  const dispatch = useDispatch();
+  const navigation = useNavigation<NavigationMetadata>();
 
   /**
    * 请求分类
@@ -47,13 +52,6 @@ const Transaction = () => {
    */
   const onSwitch = () => {
     direction === 'in' ? setDirection('out') : setDirection('in');
-  };
-
-  /**
-   * 分享
-   */
-  const onShare = () => {
-    console.log('12321');
   };
 
   /**
@@ -81,6 +79,48 @@ const Transaction = () => {
     );
   };
 
+  /**
+   * 提交事件
+   */
+  const onSubmit = async () => {
+    const handlers = {
+      update: () =>
+        create({
+          amount,
+          billingId: route.params.billingId,
+          categoryId,
+        }),
+      create: () =>
+        update(route.params.id as number, {
+          amount,
+          categoryId,
+        }),
+    };
+
+    const result = await handlers[route.params.id ? 'update' : 'create']();
+
+    if (!result.data) {
+      dispatch(
+        notify({
+          type: 'error',
+          message: result.errors?.find(() => true)?.message || '',
+        }),
+      );
+      return;
+    }
+
+    navigation.goBack();
+  };
+
+  /**
+   * 金额变更
+   */
+  const onAmountChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    setAmount(Number(e.nativeEvent.text));
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -103,6 +143,7 @@ const Transaction = () => {
           theme={{
             roundness: 20,
           }}
+          onChange={onAmountChange}
           render={props => {
             return (
               <View
@@ -178,48 +219,12 @@ const Transaction = () => {
           />
         </View>
 
-        {/* share */}
-        <View
-          style={{
-            marginBottom: 24,
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 16,
-            }}>
-            <Title style={[styles.title]}>有福同享，有难同当</Title>
-
-            <IconButton icon="plus" onPress={onShare} />
-          </View>
-
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {Array.from({
-              length: 10,
-            }).map((item, index) => (
-              <Avatar.Text
-                key={index}
-                label="XD"
-                size={48}
-                style={{
-                  marginHorizontal: 8,
-                }}
-              />
-            ))}
-          </ScrollView>
-        </View>
-
         <View
           style={{
             marginTop: 'auto',
             paddingBottom: 16,
           }}>
-          <Button
-            icon="cash-register"
-            mode="contained"
-            onPress={() => console.log('Pressed')}>
+          <Button icon="cash-register" mode="contained" onPress={onSubmit}>
             创建交易
           </Button>
         </View>

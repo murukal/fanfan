@@ -18,7 +18,7 @@ import {useEffect} from 'react';
 import {initialize} from './src/utils';
 import {ApolloProvider} from '@apollo/client';
 import client from './src/apis';
-import {Provider, useSelector} from 'react-redux';
+import {Provider as StoreProvider, useSelector} from 'react-redux';
 import {State, store} from './src/redux';
 
 import {
@@ -119,11 +119,11 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <Provider store={store}>
+      <StoreProvider store={store}>
         <PaperProvider theme={CombinedDefaultTheme}>
           <Routes />
         </PaperProvider>
-      </Provider>
+      </StoreProvider>
     </ApolloProvider>
   );
 };
