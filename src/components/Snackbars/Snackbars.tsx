@@ -20,12 +20,11 @@ export const Snackbars = () => {
       style={[
         {
           position: 'absolute',
-          bottom: 0,
+          top: 0,
           left: 0,
           right: 0,
         },
         {
-          flexDirection: 'column-reverse',
           overflow: 'hidden',
         },
       ]}>
@@ -34,6 +33,7 @@ export const Snackbars = () => {
           <Snackbar
             visible={true}
             key={notification.id}
+            duration={1000}
             wrapperStyle={{
               position: 'relative',
             }}

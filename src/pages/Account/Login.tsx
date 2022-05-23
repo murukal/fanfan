@@ -12,9 +12,11 @@ import {login} from '../../apis/auth';
 import {NavigationMetadata} from '../../typings/navigation';
 import {reinitialize} from '../../utils';
 import {notify} from '../../redux/app';
+import {useDispatch} from 'react-redux';
 
 const Login = () => {
   const navigation = useNavigation<NavigationMetadata>();
+  const dispatch = useDispatch();
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
@@ -64,10 +66,12 @@ const Login = () => {
     });
 
     if (!result.data) {
-      notify({
-        type: 'error',
-        message: result.errors?.find(() => true)?.message || '',
-      });
+      dispatch(
+        notify({
+          type: 'error',
+          message: result.errors?.find(() => true)?.message || '',
+        }),
+      );
       return;
     }
 
@@ -94,12 +98,14 @@ const Login = () => {
         <TextInput
           value={keyword}
           onChange={onKeywordChange}
-          autoFocus={true}
           mode="outlined"
           label="用户名/邮箱"
           placeholder="请输入用户名/邮箱"
           theme={{
             roundness: 28,
+          }}
+          style={{
+            marginBottom: 8,
           }}
         />
 
@@ -112,6 +118,9 @@ const Login = () => {
           secureTextEntry
           theme={{
             roundness: 28,
+          }}
+          style={{
+            marginBottom: 8,
           }}
         />
 

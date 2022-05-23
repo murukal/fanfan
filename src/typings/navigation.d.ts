@@ -28,4 +28,6 @@ export type NavigationMetadata = NavigationProp<{
   Billing: undefined;
 
   Transaction: TransactionProp;
+
+  Transactions: undefined;
 }>;

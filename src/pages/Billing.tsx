@@ -1,14 +1,23 @@
 import React from 'react';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {View} from 'react-native';
 import {Button, Divider, Text, useTheme} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {NavigationMetadata} from '../typings/navigation';
 
 const Billing = () => {
   const route = useRoute();
   const theme = useTheme();
+  const navigation = useNavigation<NavigationMetadata>();
 
   console.log('route====', route);
+
+  /**
+   * 查看交易明细
+   */
+  const onGo2Transactions = () => {
+    navigation.navigate('Transactions');
+  };
 
   return (
     <View
@@ -17,7 +26,7 @@ const Billing = () => {
       }}>
       <Button
         mode="outlined"
-        onPress={() => console.log('Pressed')}
+        onPress={onGo2Transactions}
         style={{
           borderColor: theme.colors.primary,
           borderRadius: 24,

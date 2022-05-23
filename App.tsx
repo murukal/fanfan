@@ -37,6 +37,8 @@ import Billings from './src/pages/Billings';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Transaction from './src/pages/Transaction';
+import Snackbars from './src/components/Snackbars';
+import Transactions from './src/pages/Transactions';
 
 MaterialCommunityIcons.loadFont();
 
@@ -104,6 +106,14 @@ const Routes = () => {
             title: '交易',
           }}
         />
+
+        <Stack.Screen
+          name={Transactions.name}
+          component={Transactions}
+          options={{
+            title: '交易明细',
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -122,6 +132,7 @@ const App = () => {
       <StoreProvider store={store}>
         <PaperProvider theme={CombinedDefaultTheme}>
           <Routes />
+          <Snackbars />
         </PaperProvider>
       </StoreProvider>
     </ApolloProvider>

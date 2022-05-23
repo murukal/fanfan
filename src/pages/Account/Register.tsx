@@ -98,7 +98,7 @@ const Register = () => {
 
       <View>
         <TextInput
-          autoFocus={true}
+          // autoFocus={true}
           value={username}
           mode="outlined"
           label="用户名"

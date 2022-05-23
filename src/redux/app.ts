@@ -35,6 +35,8 @@ const slice = createSlice({
 
     notify: {
       reducer: (state, action: PayloadAction<NotificationWithId>) => {
+        console.log('action===', action.payload);
+
         state.notifications.push(action.payload);
       },
       prepare: (notification: Notification) => {

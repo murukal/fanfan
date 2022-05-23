@@ -84,13 +84,13 @@ const Transaction = () => {
    */
   const onSubmit = async () => {
     const handlers = {
-      update: () =>
+      create: () =>
         create({
           amount,
           billingId: route.params.billingId,
           categoryId,
         }),
-      create: () =>
+      update: () =>
         update(route.params.id as number, {
           amount,
           categoryId,
@@ -108,6 +108,8 @@ const Transaction = () => {
       );
       return;
     }
+
+    // 创建完成进入账本详情页
 
     navigation.goBack();
   };
@@ -129,9 +131,6 @@ const Transaction = () => {
       <ScrollView
         style={{
           padding: 20,
-        }}
-        contentContainerStyle={{
-          flex: 1,
         }}>
         <TextInput
           style={{
