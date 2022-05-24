@@ -42,7 +42,25 @@ const authLink = setContext((_, {headers}) => {
  */
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          transactions: {
+            read(existing) {
+              console.log('existing=====', existing);
+              return existing && existing.slice(0);
+            },
+
+            merge(existing, incoming) {
+              const merged = existing ? existing.slice(0) : [];
+              return [].concat(merged, incoming);
+            },
+          },
+        },
+      },
+    },
+  }),
 });
 
 export default client;
@@ -73,7 +91,7 @@ export const fetcher = {
 const RSA_PUBLIC_KEY: TypedDocumentNode<{
   rsaPublicKey: string;
 }> = gql`
-  query {
+  query RsaPublicKey {
     rsaPublicKey
   }
 `;
