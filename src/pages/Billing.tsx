@@ -1,16 +1,12 @@
 import React from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
 import {View} from 'react-native';
 import {Button, Divider, Text, useTheme} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {NavigationMetadata} from '../typings/navigation';
+import {useNavigation} from '../utils/navigation';
 
 const Billing = () => {
-  const route = useRoute();
   const theme = useTheme();
-  const navigation = useNavigation<NavigationMetadata>();
-
-  console.log('route====', route);
+  const navigation = useNavigation();
 
   /**
    * 查看交易明细

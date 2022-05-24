@@ -1,13 +1,12 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, Pressable, View} from 'react-native';
 import {Text, Title} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {State} from '../../redux';
-import {NavigationMetadata} from '../../typings/navigation';
+import {useNavigation} from '../../utils/navigation';
 
 const Services = () => {
-  const navigation = useNavigation<NavigationMetadata>();
+  const navigation = useNavigation();
   const billingId = useSelector<State, number | undefined>(
     state => state.userProfile.user?.moneyProfile.defaultBilling.id,
   );

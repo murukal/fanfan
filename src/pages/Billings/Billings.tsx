@@ -5,14 +5,13 @@ import React from 'react';
 import {BillingCard} from '../../components/Billing';
 import {Billing} from '../../typings/billing';
 import {Button, Divider, IconButton, Text} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {NavigationMetadata} from '../../typings/navigation';
 import {useSelector} from 'react-redux';
 import {State} from '../../redux';
 import {UserProfile} from '../../redux/user-profile';
+import {useNavigation} from '../../utils/navigation';
 
 const Billings = () => {
-  const navigation = useNavigation<NavigationMetadata>();
+  const navigation = useNavigation();
   const userProfile = useSelector<State, UserProfile>(
     state => state.userProfile,
   );

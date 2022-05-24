@@ -1,13 +1,13 @@
 import React from 'react';
-import {View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {SafeAreaView} from 'react-native';
+import {useRoute} from '../../utils/navigation';
 
 const Transactions = () => {
-  return (
-    <View>
-      <Text>12312</Text>
-    </View>
-  );
+  const {params} = useRoute();
+
+  console.log(params);
+
+  return <SafeAreaView>{/* <FlatList></FlatList> */}</SafeAreaView>;
 };
 
 export default Transactions;

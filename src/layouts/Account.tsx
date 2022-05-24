@@ -1,12 +1,11 @@
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import Login from '../pages/Account/Login';
 import Register from '../pages/Account/Register';
 import {State} from '../redux';
-import {NavigationMetadata} from '../typings/navigation';
+import {useNavigation} from '../utils/navigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +13,7 @@ const Account = () => {
   const isLogin = useSelector<State, boolean>(
     state => state.userProfile.isLogin,
   );
-  const navigation = useNavigation<NavigationMetadata>();
+  const navigation = useNavigation();
 
   useEffect(() => {
     isLogin && navigation.navigate('Layout');

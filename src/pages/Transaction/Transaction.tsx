@@ -23,10 +23,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useQuery} from '@apollo/client';
 import {CATEGORIES} from '../../apis/category';
 import {Category} from '../../typings/category';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {NavigationMetadata, TransactionProp} from '../../typings/navigation';
+import {TransactionProp} from '../../typings/navigation';
 import {create, update} from '../../apis/transaction';
 import {errorsNotify} from '../../utils';
+import {useNavigation, useRoute} from '../../utils/navigation';
 
 const directions = {
   in: '收入',
@@ -37,8 +37,8 @@ const Transaction = () => {
   const [direction, setDirection] = useState<keyof typeof directions>('out');
   const [categoryId, setCategoryId] = useState<number>(0);
   const [amount, setAmount] = useState<number>(0);
-  const route = useRoute<RouteProp<{params: TransactionProp}>>();
-  const navigation = useNavigation<NavigationMetadata>();
+  const route = useRoute<TransactionProp>();
+  const navigation = useNavigation();
 
   /**
    * 请求分类

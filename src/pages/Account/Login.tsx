@@ -1,5 +1,4 @@
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
 import {useState} from 'react';
 import {
   NativeSyntheticEvent,
@@ -9,11 +8,11 @@ import {
 } from 'react-native';
 import {Text, TextInput, Button, useTheme, Checkbox} from 'react-native-paper';
 import {login} from '../../apis/auth';
-import {NavigationMetadata} from '../../typings/navigation';
 import {errorsNotify, reinitialize} from '../../utils';
+import {useNavigation} from '../../utils/navigation';
 
 const Login = () => {
-  const navigation = useNavigation<NavigationMetadata>();
+  const navigation = useNavigation();
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
