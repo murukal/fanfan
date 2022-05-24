@@ -12,14 +12,16 @@ import {TransactionsProp} from '../../typings/navigation';
 import {Direction} from '../../typings/transaction';
 import {useRoute} from '../../utils/navigation';
 
+const limit = 20;
+
 const Transactions = () => {
   const {
     params: {billingId},
   } = useRoute<TransactionsProp>();
   const [page, setPage] = useState(1);
   const [directions, setDirections] = useState<Direction[]>([
-    Direction.in,
-    Direction.out,
+    Direction.In,
+    Direction.Out,
   ]);
 
   /**
@@ -31,7 +33,14 @@ const Transactions = () => {
     refetch,
   } = useQuery(TRANSACTIONS, {
     variables: {
-      billingId,
+      filterInput: {
+        billingId,
+        directions: directions,
+      },
+      paginateInput: {
+        page,
+        limit,
+      },
     },
   });
 
@@ -50,7 +59,9 @@ const Transactions = () => {
 
     const result = await fetchMore({
       variables: {
-        page: nextPage,
+        paginateInput: {
+          page: nextPage,
+        },
       },
     });
 
@@ -59,13 +70,14 @@ const Transactions = () => {
       return;
     }
 
+    // 获取数据成功，更新page
     setPage(nextPage);
   };
 
   /**
    * 交易方向的触发事件
    */
-  const onDirectionToggle = (value?: string | GestureResponderEvent) => {
+  const onDirectionToggle = async (value?: string | GestureResponderEvent) => {
     const isInclude = directions.includes(value as Direction);
 
     if (isInclude) {
@@ -74,7 +86,9 @@ const Transactions = () => {
       setDirections([...directions, value as Direction]);
     }
 
-    refetch({});
+    // 重新请求数据
+    setPage(1);
+    await refetch();
   };
 
   return (
@@ -87,24 +101,24 @@ const Transactions = () => {
             }}>
             <ToggleButton
               icon="bluetooth"
-              value={Direction.in}
+              value={Direction.In}
               status={
-                directions.includes(Direction.in) ? 'checked' : 'unchecked'
+                directions.includes(Direction.In) ? 'checked' : 'unchecked'
               }
               onPress={onDirectionToggle}
             />
 
             <ToggleButton
               icon="bluetooth"
-              value={Direction.out}
+              value={Direction.Out}
               status={
-                directions.includes(Direction.out) ? 'checked' : 'unchecked'
+                directions.includes(Direction.Out) ? 'checked' : 'unchecked'
               }
               onPress={onDirectionToggle}
             />
           </View>
         )}
-        data={transactions?.transactions}
+        data={transactions?.transactions.items}
         renderItem={renderTransaction}
         showsVerticalScrollIndicator={false}
         onEndReached={onFetchMore}

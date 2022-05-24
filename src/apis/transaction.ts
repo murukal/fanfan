@@ -1,7 +1,9 @@
 import {gql, TypedDocumentNode} from '@apollo/client';
 import {fetcher} from '.';
+import {PaginateInput, PaginateOutput} from '../typings';
 import {
   CreateTransactionInput,
+  FilterTransactionInput,
   Transaction,
   UpdateTransactionInput,
 } from '../typings/transaction';
@@ -69,15 +71,21 @@ export const update = (
  */
 export const TRANSACTIONS: TypedDocumentNode<
   {
-    transactions: Transaction[];
+    transactions: PaginateOutput<Transaction>;
   },
   {
-    billingId: number;
+    filterInput: FilterTransactionInput;
+    paginateInput: PaginateInput;
   }
 > = gql`
-  query ($billingId: Int!) {
-    transactions(billingId: $billingId) {
-      id
+  query Transactions(
+    $filterInput: FilterTransactionInput!
+    $paginateInput: PaginateInput!
+  ) {
+    transactions(filterInput: $filterInput, paginateInput: $paginateInput) {
+      items {
+        id
+      }
     }
   }
 `;

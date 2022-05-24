@@ -1,6 +1,6 @@
 export enum Direction {
-  'in' = 'in',
-  'out' = 'out',
+  In = 'In',
+  Out = 'Out',
 }
 
 export interface Transaction {
@@ -16,3 +16,8 @@ export interface CreateTransactionInput
 
 export interface UpdateTransactionInput
   extends Omit<CreateTransactionInput, 'billingId'> {}
+
+export interface FilterTransactionInput {
+  billingId: number;
+  directions: Direction[];
+}
