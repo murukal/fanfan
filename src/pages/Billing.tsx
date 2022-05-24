@@ -2,17 +2,23 @@ import React from 'react';
 import {View} from 'react-native';
 import {Button, Divider, Text, useTheme} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useNavigation} from '../utils/navigation';
+import {BillingProp} from '../typings/navigation';
+import {useNavigation, useRoute} from '../utils/navigation';
 
 const Billing = () => {
   const theme = useTheme();
   const navigation = useNavigation();
+  const {
+    params: {id},
+  } = useRoute<BillingProp>();
 
   /**
    * 查看交易明细
    */
   const onGo2Transactions = () => {
-    navigation.navigate('Transactions');
+    navigation.navigate('Transactions', {
+      billingId: id,
+    });
   };
 
   return (

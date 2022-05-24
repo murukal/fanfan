@@ -12,6 +12,10 @@ export interface TransactionsProp {
   billingId: number;
 }
 
+export interface BillingProp {
+  id: number;
+}
+
 /**
  * 路由的ts声明
  */
@@ -30,7 +34,9 @@ export type NavigationMetadata = NavigationProp<{
 
   Billings: undefined;
 
-  Billing: undefined;
+  Billing: {
+    id: number;
+  };
 
   Transaction: TransactionProp;
 

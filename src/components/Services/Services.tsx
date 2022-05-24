@@ -14,6 +14,7 @@ const Services = () => {
   const services = [
     {
       title: '新建交易',
+      image: require('../../../public/images/transaction.jpeg'),
       onPress: () => {
         // 未设置默认账本
         if (!billingId) {
@@ -27,18 +28,21 @@ const Services = () => {
     },
     {
       title: '我的账本',
+      image: require('../../../public/images/billings.jpeg'),
       onPress: () => {
         navigation.navigate('Billings');
       },
     },
     {
       title: '心愿单',
+      image: require('../../../public/images/want.jpeg'),
       onPress: () => {
         console.log('12321');
       },
     },
     {
       title: '记事本',
+      image: require('../../../public/images/todo.jpeg'),
       onPress: () => {
         console.log('12321');
       },
@@ -69,14 +73,10 @@ const Services = () => {
               }}>
               <Image
                 style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 999,
-                  marginBottom: 12,
+                  width: 80,
+                  height: 80,
                 }}
-                source={{
-                  uri: 'https://picsum.photos/700',
-                }}
+                source={service.image}
               />
 
               <Text>{service.title}</Text>

@@ -44,8 +44,10 @@ const Billings = () => {
   /**
    * 查看账单明细
    */
-  const onGo2Billing = () => {
-    navigation.navigate('Billing');
+  const onGo2Billing = (id: number) => () => {
+    navigation.navigate('Billing', {
+      id,
+    });
   };
 
   /**
@@ -78,7 +80,7 @@ const Billings = () => {
             icon="dots-horizontal"
             color="grey"
             size={16}
-            onPress={onGo2Billing}
+            onPress={onGo2Billing(billing.id)}
           />
         </View>
 

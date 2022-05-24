@@ -1,7 +1,4 @@
-export enum Direction {
-  In = 'In',
-  Out = 'Out',
-}
+import {Direction} from '../utils';
 
 export interface Transaction {
   id: number;

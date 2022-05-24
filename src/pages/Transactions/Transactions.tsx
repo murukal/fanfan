@@ -9,7 +9,7 @@ import {
 import {ToggleButton} from 'react-native-paper';
 import {TRANSACTIONS} from '../../apis/transaction';
 import {TransactionsProp} from '../../typings/navigation';
-import {Direction} from '../../typings/transaction';
+import {Direction} from '../../utils';
 import {useRoute} from '../../utils/navigation';
 
 const limit = 20;
