@@ -42,25 +42,26 @@ const authLink = setContext((_, {headers}) => {
  */
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          transactions: {
-            read(existing) {
-              console.log('existing=====', existing);
-              return existing && existing.slice(0);
-            },
-
-            merge(existing, incoming) {
-              const merged = existing ? existing.slice(0) : [];
-              return [].concat(merged, incoming);
-            },
-          },
-        },
-      },
-    },
-  }),
+  cache: new InMemoryCache(),
+  // {
+  // typePolicies: {
+  //   Query: {
+  //     fields: {
+  //       transactions: {
+  //         read(existing) {
+  //           console.log('read=====', existing);
+  //           return existing;
+  //         },
+  //         merge(existing, incoming) {
+  //           console.log('merge existing====', existing);
+  //           console.log('merge incoming====', incoming);
+  //           return incoming;
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
+  // }
 });
 
 export default client;

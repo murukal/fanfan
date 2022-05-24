@@ -9,7 +9,10 @@ export interface Transaction {
 }
 
 export interface CreateTransactionInput
-  extends Pick<Transaction, 'billingId' | 'categoryId' | 'amount'> {}
+  extends Pick<
+    Transaction,
+    'billingId' | 'categoryId' | 'amount' | 'direction'
+  > {}
 
 export interface UpdateTransactionInput
   extends Omit<CreateTransactionInput, 'billingId'> {}

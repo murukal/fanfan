@@ -27,20 +27,19 @@ import {TransactionProp} from '../../typings/navigation';
 import {create, update} from '../../apis/transaction';
 import {errorsNotify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
-
-const directions = {
-  in: '收入',
-  out: '支出',
-};
+import {useDispatch} from 'react-redux';
+import {notify} from '../../redux/app';
+import {Direction, DirectionDescription} from '../../assets/transaction';
 
 const Transaction = () => {
-  const [direction, setDirection] = useState<keyof typeof directions>('out');
-  const [categoryId, setCategoryId] = useState<number>(0);
-  const [amount, setAmount] = useState<number>(0);
+  const [direction, setDirection] = useState<Direction>(Direction.Out);
+  const [categoryId, setCategoryId] = useState<number>();
+  const [amount, setAmount] = useState<string>();
   const {
     params: {id, billingId},
   } = useRoute<TransactionProp>();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   /**
    * 请求分类
@@ -51,7 +50,9 @@ const Transaction = () => {
    * 切换交易方向
    */
   const onSwitch = () => {
-    direction === 'in' ? setDirection('out') : setDirection('in');
+    direction === Direction.In
+      ? setDirection(Direction.Out)
+      : setDirection(Direction.In);
   };
 
   /**
@@ -83,17 +84,29 @@ const Transaction = () => {
    * 提交事件
    */
   const onSubmit = async () => {
+    if (!categoryId || !amount || isNaN(Number(amount))) {
+      dispatch(
+        notify({
+          type: 'error',
+          message: '请填写必须信息！',
+        }),
+      );
+      return;
+    }
+
     const handlers = {
       create: () =>
         create({
-          amount,
+          amount: Number(amount),
           billingId: billingId,
           categoryId,
+          direction,
         }),
       update: () =>
         update(id as number, {
-          amount,
+          amount: Number(amount),
           categoryId,
+          direction,
         }),
     };
 
@@ -116,7 +129,7 @@ const Transaction = () => {
   const onAmountChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
-    setAmount(Number(e.nativeEvent.text));
+    setAmount(e.nativeEvent.text);
   };
 
   return (
@@ -138,6 +151,7 @@ const Transaction = () => {
           theme={{
             roundness: 20,
           }}
+          value={amount}
           onChange={onAmountChange}
           render={props => {
             return (
@@ -155,7 +169,7 @@ const Transaction = () => {
                     height: 32,
                     marginHorizontal: 12,
                   }}>
-                  {directions[direction]}
+                  {DirectionDescription[direction]}
                 </Chip>
                 <MaterialCommunityIcons name="currency-cny" size={20} />
                 <NativeTextInput {...props} keyboardType="numeric" />
@@ -219,7 +233,16 @@ const Transaction = () => {
             marginTop: 'auto',
             paddingBottom: 16,
           }}>
-          <Button icon="cash-register" mode="contained" onPress={onSubmit}>
+          <Button
+            icon="cash-register"
+            mode="contained"
+            onPress={onSubmit}
+            contentStyle={{
+              height: 48,
+            }}
+            style={{
+              borderRadius: 12,
+            }}>
             创建交易
           </Button>
         </View>

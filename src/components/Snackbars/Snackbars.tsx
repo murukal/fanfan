@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Snackbar} from 'react-native-paper';
+import {Snackbar, Text, Colors} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {State} from '../../redux';
 import {NotificationWithId, notified} from '../../redux/app';
@@ -33,12 +33,22 @@ export const Snackbars = () => {
           <Snackbar
             visible={true}
             key={notification.id}
-            duration={1000}
+            duration={3000}
             wrapperStyle={{
               position: 'relative',
             }}
             onDismiss={onDismiss(notification.id)}>
-            {notification.message}
+            <Text
+              style={{
+                color:
+                  notification.type === 'error'
+                    ? Colors.red300
+                    : notification.type === 'success'
+                    ? Colors.green300
+                    : Colors.grey300,
+              }}>
+              {notification.message}
+            </Text>
           </Snackbar>
         );
       })}

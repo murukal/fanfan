@@ -1,15 +1,11 @@
 import {useQuery} from '@apollo/client';
 import React, {useState} from 'react';
-import {
-  FlatList,
-  GestureResponderEvent,
-  SafeAreaView,
-  View,
-} from 'react-native';
-import {ToggleButton} from 'react-native-paper';
+import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Text, ToggleButton} from 'react-native-paper';
 import {TRANSACTIONS} from '../../apis/transaction';
+import {Direction} from '../../assets/transaction';
 import {TransactionsProp} from '../../typings/navigation';
-import {Direction} from '../../utils';
+import {Transaction} from '../../typings/transaction';
 import {useRoute} from '../../utils/navigation';
 
 const limit = 20;
@@ -47,8 +43,12 @@ const Transactions = () => {
   /**
    * 渲染交易
    */
-  const renderTransaction = () => {
-    return <View />;
+  const renderTransaction = ({item}: {item: Transaction}) => {
+    return (
+      <View>
+        <Text>{item.id}</Text>
+      </View>
+    );
   };
 
   /**
@@ -65,11 +65,9 @@ const Transactions = () => {
       },
     });
 
-    // 没有更多
     if (!result.data) {
       return;
     }
-
     // 获取数据成功，更新page
     setPage(nextPage);
   };
@@ -77,7 +75,7 @@ const Transactions = () => {
   /**
    * 交易方向的触发事件
    */
-  const onDirectionToggle = async (value?: string | GestureResponderEvent) => {
+  const onDirectionToggle = (value: Direction) => async () => {
     const isInclude = directions.includes(value as Direction);
 
     if (isInclude) {
@@ -98,23 +96,36 @@ const Transactions = () => {
           <View
             style={{
               flexDirection: 'row',
+              marginTop: 16,
             }}>
             <ToggleButton
-              icon="bluetooth"
-              value={Direction.In}
+              style={[
+                styles.direction,
+                {
+                  marginLeft: 16,
+                  marginRight: 8,
+                },
+              ]}
+              icon="battery-plus-outline"
               status={
                 directions.includes(Direction.In) ? 'checked' : 'unchecked'
               }
-              onPress={onDirectionToggle}
+              onPress={onDirectionToggle(Direction.In)}
             />
 
             <ToggleButton
-              icon="bluetooth"
-              value={Direction.Out}
+              style={[
+                styles.direction,
+                {
+                  marginRight: 16,
+                  marginLeft: 8,
+                },
+              ]}
+              icon="battery-minus-outline"
               status={
                 directions.includes(Direction.Out) ? 'checked' : 'unchecked'
               }
-              onPress={onDirectionToggle}
+              onPress={onDirectionToggle(Direction.Out)}
             />
           </View>
         )}
@@ -128,3 +139,11 @@ const Transactions = () => {
 };
 
 export default Transactions;
+
+const styles = StyleSheet.create({
+  direction: {
+    flex: 1,
+    borderRadius: 20,
+    marginBottom: 16,
+  },
+});
