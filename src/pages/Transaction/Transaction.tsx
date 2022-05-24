@@ -37,7 +37,9 @@ const Transaction = () => {
   const [direction, setDirection] = useState<keyof typeof directions>('out');
   const [categoryId, setCategoryId] = useState<number>(0);
   const [amount, setAmount] = useState<number>(0);
-  const route = useRoute<TransactionProp>();
+  const {
+    params: {id, billingId},
+  } = useRoute<TransactionProp>();
   const navigation = useNavigation();
 
   /**
@@ -85,26 +87,27 @@ const Transaction = () => {
       create: () =>
         create({
           amount,
-          billingId: route.params.billingId,
+          billingId: billingId,
           categoryId,
         }),
       update: () =>
-        update(route.params.id as number, {
+        update(id as number, {
           amount,
           categoryId,
         }),
     };
 
-    const result = await handlers[route.params.id ? 'update' : 'create']();
+    const result = await handlers[id ? 'update' : 'create']();
 
     if (!result.data) {
       errorsNotify(result.errors);
       return;
     }
 
-    // 创建完成进入账本详情页
-
-    navigation.goBack();
+    // 创建完成进入当前账本的交易明细页面
+    navigation.navigate('Transactions', {
+      billingId,
+    });
   };
 
   /**

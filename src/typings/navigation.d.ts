@@ -7,6 +7,11 @@ export interface TransactionProp {
   billingId: number;
 }
 
+export interface TransactionsProp {
+  // 账本id
+  billingId: number;
+}
+
 /**
  * 路由的ts声明
  */
@@ -29,5 +34,5 @@ export type NavigationMetadata = NavigationProp<{
 
   Transaction: TransactionProp;
 
-  Transactions: undefined;
+  Transactions: TransactionsProp;
 }>;

@@ -1,13 +1,40 @@
+import {useQuery} from '@apollo/client';
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {FlatList, SafeAreaView, View} from 'react-native';
+import {TRANSACTIONS} from '../../apis/transaction';
+import {TransactionsProp} from '../../typings/navigation';
 import {useRoute} from '../../utils/navigation';
 
 const Transactions = () => {
-  const {params} = useRoute();
+  const {
+    params: {billingId},
+  } = useRoute<TransactionsProp>();
 
-  console.log(params);
+  /**
+   * 获取当前账本下的交易明细
+   */
+  const {data: transactions} = useQuery(TRANSACTIONS, {
+    variables: {
+      billingId,
+    },
+  });
 
-  return <SafeAreaView>{/* <FlatList></FlatList> */}</SafeAreaView>;
+  /**
+   * 渲染交易
+   */
+  const renderTransaction = () => {
+    return <View />;
+  };
+
+  return (
+    <SafeAreaView>
+      <FlatList
+        data={transactions?.transactions}
+        renderItem={renderTransaction}
+        showsVerticalScrollIndicator={false}
+      />
+    </SafeAreaView>
+  );
 };
 
 export default Transactions;

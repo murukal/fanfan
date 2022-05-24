@@ -63,3 +63,21 @@ export const update = (
       updateTransactionInput,
     },
   });
+
+/**
+ * 查询交易
+ */
+export const TRANSACTIONS: TypedDocumentNode<
+  {
+    transactions: Transaction[];
+  },
+  {
+    billingId: number;
+  }
+> = gql`
+  query ($billingId: Int!) {
+    transactions(billingId: $billingId) {
+      id
+    }
+  }
+`;

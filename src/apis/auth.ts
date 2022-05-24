@@ -11,7 +11,7 @@ import type {LoginInput, RegisterInput, User} from '../typings/auth';
 const WHO_AM_I: TypedDocumentNode<{
   whoAmI: User;
 }> = gql`
-  query {
+  query WhoAmI {
     whoAmI {
       id
       username
@@ -45,7 +45,7 @@ const LOGIN: TypedDocumentNode<
     loginInput: LoginInput;
   }
 > = gql`
-  mutation ($loginInput: LoginInput!) {
+  mutation Login($loginInput: LoginInput!) {
     login(loginInput: $loginInput)
   }
 `;
