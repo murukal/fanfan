@@ -26,8 +26,7 @@ import {Category} from '../../typings/category';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {NavigationMetadata, TransactionProp} from '../../typings/navigation';
 import {create, update} from '../../apis/transaction';
-import {notify} from '../../redux/app';
-import {useDispatch} from 'react-redux';
+import {errorsNotify} from '../../utils';
 
 const directions = {
   in: '收入',
@@ -39,7 +38,6 @@ const Transaction = () => {
   const [categoryId, setCategoryId] = useState<number>(0);
   const [amount, setAmount] = useState<number>(0);
   const route = useRoute<RouteProp<{params: TransactionProp}>>();
-  const dispatch = useDispatch();
   const navigation = useNavigation<NavigationMetadata>();
 
   /**
@@ -100,12 +98,7 @@ const Transaction = () => {
     const result = await handlers[route.params.id ? 'update' : 'create']();
 
     if (!result.data) {
-      dispatch(
-        notify({
-          type: 'error',
-          message: result.errors?.find(() => true)?.message || '',
-        }),
-      );
+      errorsNotify(result.errors);
       return;
     }
 

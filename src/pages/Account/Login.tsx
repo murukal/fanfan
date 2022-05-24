@@ -10,13 +10,10 @@ import {
 import {Text, TextInput, Button, useTheme, Checkbox} from 'react-native-paper';
 import {login} from '../../apis/auth';
 import {NavigationMetadata} from '../../typings/navigation';
-import {reinitialize} from '../../utils';
-import {notify} from '../../redux/app';
-import {useDispatch} from 'react-redux';
+import {errorsNotify, reinitialize} from '../../utils';
 
 const Login = () => {
   const navigation = useNavigation<NavigationMetadata>();
-  const dispatch = useDispatch();
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
@@ -66,12 +63,7 @@ const Login = () => {
     });
 
     if (!result.data) {
-      dispatch(
-        notify({
-          type: 'error',
-          message: result.errors?.find(() => true)?.message || '',
-        }),
-      );
+      errorsNotify(result.errors);
       return;
     }
 
