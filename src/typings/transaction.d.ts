@@ -1,11 +1,12 @@
 import {Direction} from '../utils';
+import {Category} from './category';
 
 export interface Transaction {
   id: number;
   billingId: number;
-  categoryId: number;
   amount: number;
   direction: Direction;
+  category: Category;
 }
 
 export interface CreateTransactionInput

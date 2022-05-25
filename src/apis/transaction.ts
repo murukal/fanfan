@@ -85,6 +85,10 @@ export const TRANSACTIONS: TypedDocumentNode<
     transactions(filterInput: $filterInput, paginateInput: $paginateInput) {
       items {
         id
+        direction
+        category {
+          icon
+        }
       }
     }
   }

@@ -1,12 +1,13 @@
 import {useQuery} from '@apollo/client';
 import React, {useState} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Text, ToggleButton} from 'react-native-paper';
+import {Colors, FAB, Text, ToggleButton} from 'react-native-paper';
 import {TRANSACTIONS} from '../../apis/transaction';
 import {Direction} from '../../assets/transaction';
 import {TransactionsProp} from '../../typings/navigation';
 import {Transaction} from '../../typings/transaction';
-import {useRoute} from '../../utils/navigation';
+import {useNavigation, useRoute} from '../../utils/navigation';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const limit = 20;
 
@@ -19,6 +20,7 @@ const Transactions = () => {
     Direction.In,
     Direction.Out,
   ]);
+  const navigation = useNavigation();
 
   /**
    * 获取当前账本下的交易明细
@@ -44,9 +46,25 @@ const Transactions = () => {
    * 渲染交易
    */
   const renderTransaction = ({item}: {item: Transaction}) => {
+    const color =
+      item.direction === Direction.In ? Colors.blue300 : Colors.red300;
+
+    console.log('color====', color);
+
     return (
-      <View>
-        <Text>{item.id}</Text>
+      <View
+        style={{
+          marginHorizontal: 16,
+          marginBottom: 16,
+          flexDirection: 'row',
+        }}>
+        {/* 分类按钮 */}
+        <MaterialCommunityIcons name={item.category.icon} />
+
+        {/* 详细信息 */}
+        <View>
+          <Text>{item.id}</Text>
+        </View>
       </View>
     );
   };
@@ -87,6 +105,15 @@ const Transactions = () => {
     // 重新请求数据
     setPage(1);
     await refetch();
+  };
+
+  /**
+   * 创建交易
+   */
+  const onCreate = () => {
+    navigation.navigate('Transaction', {
+      billingId,
+    });
   };
 
   return (
@@ -133,6 +160,18 @@ const Transactions = () => {
         renderItem={renderTransaction}
         showsVerticalScrollIndicator={false}
         onEndReached={onFetchMore}
+      />
+
+      <FAB
+        style={{
+          position: 'absolute',
+          margin: 16,
+          right: 0,
+          bottom: 0,
+        }}
+        small
+        icon="plus"
+        onPress={onCreate}
       />
     </SafeAreaView>
   );
