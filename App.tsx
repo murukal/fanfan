@@ -39,6 +39,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Transaction from './src/pages/Transaction';
 import Snackbars from './src/components/Snackbars';
 import Transactions from './src/pages/Transactions';
+import Users from './src/pages/Users';
 
 MaterialCommunityIcons.loadFont();
 
@@ -112,6 +113,14 @@ const Routes = () => {
           component={Transactions}
           options={{
             title: '交易明细',
+          }}
+        />
+
+        <Stack.Screen
+          name={Users.name}
+          component={Users}
+          options={{
+            title: '用户列表',
           }}
         />
       </Stack.Navigator>

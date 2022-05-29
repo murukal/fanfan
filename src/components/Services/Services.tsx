@@ -8,7 +8,7 @@ import {useNavigation} from '../../utils/navigation';
 const Services = () => {
   const navigation = useNavigation();
   const billingId = useSelector<State, number | undefined>(
-    state => state.userProfile.user?.moneyProfile.defaultBilling.id,
+    state => state.userProfile.user?.moneyProfile.defaultBilling?.id,
   );
 
   const services = [
@@ -56,7 +56,7 @@ const Services = () => {
           flexDirection: 'row',
           marginBottom: 16,
         }}>
-        <Title>Services</Title>
+        <Title>快捷方式</Title>
       </View>
 
       <View

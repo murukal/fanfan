@@ -1,4 +1,5 @@
 import {NavigationProp} from '@react-navigation/native';
+import {TargetType} from '../apis/share';
 
 export interface TransactionProp {
   // 交易id，可选：更新需要
@@ -12,8 +13,16 @@ export interface TransactionsProp {
   billingId: number;
 }
 
-export interface BillingProp {
-  id: number;
+export type BillingProp =
+  | {
+      id: number;
+    }
+  | undefined;
+
+export interface UsersProp {
+  fromType: TargetType;
+  fromId: number;
+  checkedIds: number[];
 }
 
 /**
@@ -34,11 +43,11 @@ export type NavigationMetadata = NavigationProp<{
 
   Billings: undefined;
 
-  Billing: {
-    id: number;
-  };
+  Billing: BillingProp;
 
   Transaction: TransactionProp;
 
   Transactions: TransactionsProp;
+
+  Users: UsersProp | undefined;
 }>;

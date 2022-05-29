@@ -7,6 +7,7 @@ export interface Transaction {
   amount: number;
   direction: Direction;
   category: Category;
+  createdAt: string;
 }
 
 export interface CreateTransactionInput

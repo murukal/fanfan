@@ -89,6 +89,8 @@ export const TRANSACTIONS: TypedDocumentNode<
         category {
           icon
         }
+        createdAt
+        amount
       }
     }
   }

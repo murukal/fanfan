@@ -4,7 +4,7 @@ import {BILLINGS, createBilling} from '../../apis/billing';
 import React from 'react';
 import {BillingCard} from '../../components/Billing';
 import {Billing} from '../../typings/billing';
-import {Button, Divider, IconButton, Text} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {State} from '../../redux';
 import {UserProfile} from '../../redux/user-profile';
@@ -42,53 +42,16 @@ const Billings = () => {
   };
 
   /**
-   * 查看账单明细
-   */
-  const onGo2Billing = (id: number) => () => {
-    navigation.navigate('Billing', {
-      id,
-    });
-  };
-
-  /**
    * 账本渲染
    */
   const renderBilling = (billing: Billing) => {
     return (
       <View key={billing.id}>
-        <View
+        <BillingCard
+          billing={billing}
+          size="small"
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 12,
-          }}>
-          <Text
-            style={{
-              marginLeft: 6,
-            }}>
-            {billing.name}
-          </Text>
-
-          <Text
-            style={{
-              marginLeft: 'auto',
-            }}>
-            余额：12312312
-          </Text>
-
-          <IconButton
-            icon="dots-horizontal"
-            color="grey"
-            size={16}
-            onPress={onGo2Billing(billing.id)}
-          />
-        </View>
-
-        <BillingCard billing={billing} />
-
-        <Divider
-          style={{
-            marginBottom: 16,
+            marginBottom: 24,
           }}
         />
       </View>
@@ -96,11 +59,13 @@ const Billings = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}>
       <ScrollView
         style={{
-          paddingHorizontal: 20,
-          marginVertical: 20,
+          padding: 20,
         }}>
         {data?.billings.map(item => renderBilling(item))}
 

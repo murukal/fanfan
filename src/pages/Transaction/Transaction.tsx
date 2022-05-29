@@ -139,7 +139,7 @@ const Transaction = () => {
       }}>
       <ScrollView
         style={{
-          padding: 20,
+          padding: 16,
         }}>
         <TextInput
           style={{

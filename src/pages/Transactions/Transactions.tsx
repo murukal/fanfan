@@ -1,13 +1,14 @@
 import {useQuery} from '@apollo/client';
 import React, {useState} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Colors, FAB, Text, ToggleButton} from 'react-native-paper';
+import {Button, Card, FAB, Text, Title} from 'react-native-paper';
 import {TRANSACTIONS} from '../../apis/transaction';
 import {Direction} from '../../assets/transaction';
 import {TransactionsProp} from '../../typings/navigation';
 import {Transaction} from '../../typings/transaction';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import dayjs from 'dayjs';
 
 const limit = 20;
 
@@ -22,23 +23,25 @@ const Transactions = () => {
   ]);
   const navigation = useNavigation();
 
+  const [transactions, setTransactions] = useState<Transaction[]>();
+
   /**
    * 获取当前账本下的交易明细
    */
-  const {
-    data: transactions,
-    fetchMore,
-    refetch,
-  } = useQuery(TRANSACTIONS, {
+  const {fetchMore} = useQuery(TRANSACTIONS, {
     variables: {
       filterInput: {
         billingId,
-        directions: directions,
+        directions,
       },
       paginateInput: {
         page,
         limit,
       },
+    },
+
+    onCompleted: data => {
+      setTransactions(data.transactions.items);
     },
   });
 
@@ -46,26 +49,44 @@ const Transactions = () => {
    * 渲染交易
    */
   const renderTransaction = ({item}: {item: Transaction}) => {
-    const color =
-      item.direction === Direction.In ? Colors.blue300 : Colors.red300;
-
-    console.log('color====', color);
+    const date = dayjs(item.createdAt);
 
     return (
-      <View
+      <Card
         style={{
-          marginHorizontal: 16,
+          marginHorizontal: 4,
           marginBottom: 16,
-          flexDirection: 'row',
+          borderRadius: 16,
         }}>
-        {/* 分类按钮 */}
-        <MaterialCommunityIcons name={item.category.icon} />
+        <Card.Content
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          {/* 分类按钮 */}
+          <MaterialCommunityIcons
+            name={item.category.icon}
+            size={48}
+            style={{
+              marginRight: 24,
+            }}
+          />
 
-        {/* 详细信息 */}
-        <View>
-          <Text>{item.id}</Text>
-        </View>
-      </View>
+          {/* 交易时间 */}
+          <View>
+            <Title>{date.format('YYYY-MM-DD')}</Title>
+            <Text>{date.format('HH:mm:ss')}</Text>
+          </View>
+
+          {/* 交易金额 */}
+          <View
+            style={{
+              marginLeft: 'auto',
+            }}>
+            <Title>{item.amount}</Title>
+          </View>
+        </Card.Content>
+      </Card>
     );
   };
 
@@ -79,15 +100,20 @@ const Transactions = () => {
       variables: {
         paginateInput: {
           page: nextPage,
+          limit,
         },
       },
     });
 
-    if (!result.data) {
+    if (!result.data || !result.data.transactions.items?.length) {
       return;
     }
-    // 获取数据成功，更新page
+
+    // 获取数据成功
     setPage(nextPage);
+    setTransactions(existedTransactions =>
+      (existedTransactions || []).concat(result.data.transactions.items || []),
+    );
   };
 
   /**
@@ -102,9 +128,7 @@ const Transactions = () => {
       setDirections([...directions, value as Direction]);
     }
 
-    // 重新请求数据
     setPage(1);
-    await refetch();
   };
 
   /**
@@ -117,46 +141,43 @@ const Transactions = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}>
       <FlatList
+        style={{
+          padding: 16,
+        }}
         ListHeaderComponent={() => (
           <View
             style={{
               flexDirection: 'row',
-              marginTop: 16,
             }}>
-            <ToggleButton
-              style={[
-                styles.direction,
-                {
-                  marginLeft: 16,
-                  marginRight: 8,
-                },
-              ]}
+            <Button
               icon="battery-plus-outline"
-              status={
-                directions.includes(Direction.In) ? 'checked' : 'unchecked'
+              mode={
+                directions.includes(Direction.In) ? 'contained' : 'outlined'
               }
-              onPress={onDirectionToggle(Direction.In)}
-            />
+              style={styles.direction}
+              contentStyle={styles.directionContent}
+              onPress={onDirectionToggle(Direction.In)}>
+              收入
+            </Button>
 
-            <ToggleButton
-              style={[
-                styles.direction,
-                {
-                  marginRight: 16,
-                  marginLeft: 8,
-                },
-              ]}
+            <Button
               icon="battery-minus-outline"
-              status={
-                directions.includes(Direction.Out) ? 'checked' : 'unchecked'
+              style={styles.direction}
+              contentStyle={styles.directionContent}
+              mode={
+                directions.includes(Direction.Out) ? 'contained' : 'outlined'
               }
-              onPress={onDirectionToggle(Direction.Out)}
-            />
+              onPress={onDirectionToggle(Direction.Out)}>
+              支出
+            </Button>
           </View>
         )}
-        data={transactions?.transactions.items}
+        data={transactions}
         renderItem={renderTransaction}
         showsVerticalScrollIndicator={false}
         onEndReached={onFetchMore}
@@ -165,9 +186,8 @@ const Transactions = () => {
       <FAB
         style={{
           position: 'absolute',
-          margin: 16,
-          right: 0,
-          bottom: 0,
+          right: 36,
+          bottom: 60,
         }}
         small
         icon="plus"
@@ -182,7 +202,12 @@ export default Transactions;
 const styles = StyleSheet.create({
   direction: {
     flex: 1,
-    borderRadius: 20,
+    borderRadius: 24,
     marginBottom: 16,
+    marginHorizontal: 8,
+  },
+
+  directionContent: {
+    height: 48,
   },
 });

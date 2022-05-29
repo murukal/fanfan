@@ -21,6 +21,16 @@ const WHO_AM_I: TypedDocumentNode<{
         defaultBilling {
           id
           name
+          createdBy {
+            id
+            username
+          }
+          shares {
+            sharedBy {
+              id
+              avatar
+            }
+          }
         }
       }
     }
