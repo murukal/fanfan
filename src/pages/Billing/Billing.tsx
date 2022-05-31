@@ -43,7 +43,7 @@ const Billing = (props: Props) => {
     navigation.navigate('Users', {
       fromType: TargetType.Billing,
       fromId: id,
-      checkedIds: billing?.billing.shares.map(share => share.sharedById) || [],
+      checkedIds: billing?.billing.shares?.map(share => share.sharedById) || [],
     });
   };
 

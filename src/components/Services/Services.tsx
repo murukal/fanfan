@@ -36,16 +36,12 @@ const Services = () => {
     {
       title: '心愿单',
       image: require('../../../public/images/want.jpeg'),
-      onPress: () => {
-        console.log('12321');
-      },
+      onPress: () => {},
     },
     {
       title: '记事本',
       image: require('../../../public/images/todo.jpeg'),
-      onPress: () => {
-        console.log('12321');
-      },
+      onPress: () => {},
     },
   ];
 

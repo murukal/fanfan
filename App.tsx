@@ -82,6 +82,7 @@ const Routes = () => {
             headerShown: false,
           }}
         />
+
         <Stack.Screen name={Account.name} component={Account} />
 
         <Stack.Screen

@@ -64,8 +64,10 @@ const Billings = () => {
         flex: 1,
       }}>
       <ScrollView
-        style={{
-          padding: 20,
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingTop: 16,
         }}>
         {data?.billings.map(item => renderBilling(item))}
 

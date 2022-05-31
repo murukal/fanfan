@@ -1,6 +1,10 @@
 import {store} from '../redux';
 import {initialized, notify, setRsaPublicKey} from '../redux/app';
-import {authenticate, setToken} from '../redux/user-profile';
+import {
+  authenticate,
+  setToken,
+  logout as logoutAction,
+} from '../redux/user-profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GraphQLError} from 'graphql';
 
@@ -53,4 +57,15 @@ export const errorsNotify = (errors?: ReadonlyArray<GraphQLError>) => {
       message: errors?.find(() => true)?.message || '',
     }),
   );
+};
+
+/**
+ * 退出登陆
+ */
+export const logout = async () => {
+  await AsyncStorage.removeItem(TOKEN_KEY);
+
+  const dispatch = store.dispatch;
+  // 退出登陆
+  dispatch(logoutAction());
 };

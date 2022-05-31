@@ -11,6 +11,8 @@ const Welcome = () => {
     state => state.userProfile,
   );
 
+  const onGo2Setting = () => {};
+
   return (
     <View
       style={{
@@ -49,11 +51,7 @@ const Welcome = () => {
           flexDirection: 'row',
           justifyContent: 'flex-end',
         }}>
-        <IconButton
-          icon="cog"
-          size={28}
-          onPress={() => console.log('Pressed')}
-        />
+        <IconButton icon="cog" size={28} onPress={onGo2Setting} />
       </View>
     </View>
   );

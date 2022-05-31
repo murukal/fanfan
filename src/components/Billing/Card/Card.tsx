@@ -40,11 +40,6 @@ const Card = (props: Props) => {
   }, [props.size, shares]);
 
   /**
-   * 账本高度
-   */
-  const height = useMemo(() => (size === 'small' ? 120 : 200), [size]);
-
-  /**
    * 查看账单明细
    */
   const onGo2Billing = () => {
@@ -63,14 +58,9 @@ const Card = (props: Props) => {
       ]}
       elevation={5}
       onPress={onGo2Billing}>
-      <PaperCard.Content
-        style={{
-          height,
-        }}>
+      <PaperCard.Content>
         <View
           style={{
-            margin: size === 'large' ? 12 : 0,
-            flex: 1,
             justifyContent: 'space-between',
           }}>
           <Title>{billing.name}</Title>
