@@ -5,13 +5,19 @@ import {UserProfile} from '../../redux/user-profile';
 import React from 'react';
 import {Avatar, Caption, IconButton, Paragraph} from 'react-native-paper';
 import dayjs from 'dayjs';
+import {useNavigation} from '../../utils/navigation';
 
 const Welcome = () => {
   const userProfile = useSelector<State, UserProfile>(
     state => state.userProfile,
   );
+  const navigation = useNavigation();
 
-  const onGo2Setting = () => {};
+  const onGo2Setting = () => {
+    navigation.navigate('Layout', {
+      screen: 'Setting',
+    });
+  };
 
   return (
     <View
