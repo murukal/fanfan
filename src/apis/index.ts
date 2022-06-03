@@ -19,7 +19,7 @@ import {store} from '../redux';
 import {GraphQLError} from 'graphql';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:9000/graphql',
+  uri: 'https://fantufantu.com/graphql',
 });
 
 const authLink = setContext((_, {headers}) => {
