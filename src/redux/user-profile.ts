@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {whoAmI} from '../apis/auth';
+import {whoAmI} from '../apis/user';
 import {User} from '../typings/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TOKEN_KEY} from '../utils';
@@ -10,10 +10,9 @@ export class UserProfile {
   token: string | null = null;
 }
 
-export const authenticate = createAsyncThunk(
-  'authenticate',
-  async () => (await whoAmI()).data?.whoAmI,
-);
+export const authenticate = createAsyncThunk('authenticate', async () => {
+  return (await whoAmI()).data?.whoAmI;
+});
 
 export const setToken = createAsyncThunk(
   'set-token',

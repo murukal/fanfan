@@ -3,46 +3,8 @@ import {gql} from '@apollo/client';
 import type {TypedDocumentNode} from '@apollo/client';
 // project
 import {fetcher} from '.';
-import type {LoginInput, RegisterInput, User} from '../typings/auth';
-
-/**
- * 获取用户信息
- */
-const WHO_AM_I: TypedDocumentNode<{
-  whoAmI: User;
-}> = gql`
-  query WhoAmI {
-    whoAmI {
-      id
-      username
-      email
-      avatar
-      moneyProfile {
-        defaultBilling {
-          id
-          name
-          createdBy {
-            id
-            username
-          }
-          shares {
-            sharedBy {
-              id
-              avatar
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-// 强制不适用缓存
-export const whoAmI = async () =>
-  await fetcher.query({
-    query: WHO_AM_I,
-    fetchPolicy: 'no-cache',
-  });
+import type {LoginInput, RegisterInput} from '../typings/auth';
+import {AppID} from '../assets';
 
 /**
  * 登录
@@ -65,6 +27,9 @@ export const login = (loginInput: LoginInput) =>
     mutation: LOGIN,
     variables: {
       loginInput,
+    },
+    context: {
+      appId: AppID.Boomemory,
     },
   });
 
@@ -89,5 +54,8 @@ export const register = (registerInput: RegisterInput) =>
     mutation: REGISTER,
     variables: {
       registerInput,
+    },
+    context: {
+      appId: AppID.Boomemory,
     },
   });
