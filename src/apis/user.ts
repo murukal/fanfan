@@ -15,7 +15,7 @@ export const USERS: TypedDocumentNode<{
         id
         avatar
         username
-        email
+        emailAddress
       }
     }
   }
@@ -31,7 +31,7 @@ const WHO_AM_I: TypedDocumentNode<{
     whoAmI {
       id
       username
-      email
+      emailAddress
       avatar
       moneyProfile {
         defaultBilling {

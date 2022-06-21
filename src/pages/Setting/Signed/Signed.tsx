@@ -42,7 +42,7 @@ const Signed = () => {
           {user?.username}
         </Text>
 
-        <Caption>{user?.email}</Caption>
+        <Caption>{user?.emailAddress}</Caption>
       </View>
 
       <Divider />

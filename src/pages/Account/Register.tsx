@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  Linking,
   NativeSyntheticEvent,
   StyleSheet,
   TextInputChangeEventData,
@@ -21,7 +22,7 @@ const Register = () => {
   const theme = useTheme();
   const [error, setError] = useState<string>('');
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
 
@@ -40,7 +41,7 @@ const Register = () => {
   const onRegister = async () => {
     const result = await register({
       username,
-      email,
+      emailAddress,
       password,
     });
 
@@ -62,9 +63,11 @@ const Register = () => {
     setUsername(e.nativeEvent.text);
   };
 
-  const onEmailChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+  const onEmailAddressChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
     setError('');
-    setEmail(e.nativeEvent.text);
+    setEmailAddress(e.nativeEvent.text);
   };
 
   const onPasswordChange = (
@@ -78,6 +81,13 @@ const Register = () => {
   ) => {
     setError('');
     setRepeatPassword(e.nativeEvent.text);
+  };
+
+  /**
+   * 查询隐私政策
+   */
+  const onViewPrivacy = () => {
+    Linking.openURL('https://fantufantu.com/privacy');
   };
 
   return (
@@ -115,10 +125,10 @@ const Register = () => {
 
         <TextInput
           mode="outlined"
-          value={email}
-          label="邮箱"
-          placeholder="请输入邮箱"
-          onChange={onEmailChange}
+          value={emailAddress}
+          label="邮箱地址"
+          placeholder="请输入邮箱地址"
+          onChange={onEmailAddressChange}
           error={!!error}
           theme={{
             roundness: 28,
@@ -188,7 +198,15 @@ const Register = () => {
             style={{
               color: theme.colors.primary,
             }}>
-            登陆
+            登陆{' '}
+          </Text>
+          查看{' '}
+          <Text
+            onPress={onViewPrivacy}
+            style={{
+              color: theme.colors.primary,
+            }}>
+            隐私政策
           </Text>
         </Text>
       </View>

@@ -4,6 +4,6 @@ export enum AppID {
 }
 
 export const AppLocation = {
-  [AppID.Boomemory]: 'http://localhost:9100',
-  [AppID.Boomoney]: 'http://localhost:9300',
+  [AppID.Boomemory]: 'https://api.fantufantu.com/boomemory',
+  [AppID.Boomoney]: 'https://api.fantufantu.com/boomoney',
 };

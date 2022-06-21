@@ -3,7 +3,7 @@ import {Billing} from './billing';
 
 export interface User extends Core {
   username: string;
-  email: string;
+  emailAddress: string;
   avatar: string;
   moneyProfile: {
     defaultBilling?: Billing;
@@ -17,6 +17,6 @@ export interface LoginInput {
 
 export interface RegisterInput {
   username: string;
-  email: string;
+  emailAddress: string;
   password: string;
 }

@@ -81,7 +81,7 @@ const Users = () => {
           {/* 名称邮箱 */}
           <View>
             <Subheading>{item.username}</Subheading>
-            <Caption>{item.email}</Caption>
+            <Caption>{item.emailAddress}</Caption>
           </View>
 
           {/* 功能区 */}
