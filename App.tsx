@@ -73,6 +73,7 @@ const Routes = () => {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
+          headerBackTitleVisible: false,
         })}
         initialRouteName={Layout.name}>
         <Stack.Screen
@@ -83,7 +84,13 @@ const Routes = () => {
           }}
         />
 
-        <Stack.Screen name={Account.name} component={Account} />
+        <Stack.Screen
+          name={Account.name}
+          component={Account}
+          options={{
+            headerShown: false,
+          }}
+        />
 
         <Stack.Screen
           name={Billings.name}

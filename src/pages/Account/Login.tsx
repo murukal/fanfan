@@ -6,7 +6,8 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
-import {Text, TextInput, Button, useTheme, Checkbox} from 'react-native-paper';
+import {Text, TextInput, Button, useTheme} from 'react-native-paper';
+import Checkbox from '../../components/Checkbox';
 import {login} from '../../apis/auth';
 import {errorsNotify, reinitialize} from '../../utils';
 import {useNavigation} from '../../utils/navigation';
@@ -48,8 +49,8 @@ const Login = () => {
   /**
    * checkbox变更
    */
-  const onIsAutoLoginChange = () => {
-    setIsAutoLogin(!isAutoLogin);
+  const onIsAutoLoginChange = (autoLogin: boolean) => {
+    setIsAutoLogin(autoLogin);
   };
 
   /**
@@ -73,30 +74,34 @@ const Login = () => {
     <View
       style={{
         flex: 1,
-        paddingTop: 64,
-        paddingBottom: 32,
-        paddingHorizontal: 32,
-        justifyContent: 'space-between',
+        padding: 32,
       }}>
       {/* 标题 */}
-      <View>
+      <View
+        style={{
+          marginBottom: 32,
+        }}>
         <Text style={styles.title}>Login to your</Text>
         <Text style={styles.title}>Account</Text>
       </View>
 
       {/* 登录form */}
-      <View>
+      <View
+        style={{
+          marginBottom: 32,
+        }}>
         <TextInput
           value={keyword}
           onChange={onKeywordChange}
           mode="outlined"
           label="用户名/邮箱"
           placeholder="请输入用户名/邮箱"
+          autoCapitalize="none"
           theme={{
             roundness: 28,
           }}
           style={{
-            marginBottom: 8,
+            marginBottom: 12,
           }}
         />
 
@@ -107,24 +112,25 @@ const Login = () => {
           label="密码"
           placeholder="请输入密码"
           secureTextEntry
+          autoCapitalize="none"
           theme={{
             roundness: 28,
-          }}
-          style={{
-            marginBottom: 8,
           }}
         />
 
         <View
           style={{
-            marginBottom: 8,
+            marginVertical: 12,
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'center',
           }}>
           <Checkbox
-            status={isAutoLogin ? 'checked' : 'unchecked'}
-            onPress={onIsAutoLoginChange}
-            color={theme.colors.primary}
+            isChecked={isAutoLogin}
+            onChange={onIsAutoLoginChange}
+            style={{
+              marginRight: 8,
+            }}
           />
 
           <Text>记住我</Text>
@@ -137,7 +143,6 @@ const Login = () => {
             height: 56,
           }}
           style={{
-            marginBottom: 64,
             borderRadius: 9999,
           }}>
           登 录

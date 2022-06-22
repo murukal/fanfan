@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   Linking,
   NativeSyntheticEvent,
+  ScrollView,
   StyleSheet,
   TextInputChangeEventData,
   View,
@@ -20,11 +21,8 @@ import {useNavigation} from '../../utils/navigation';
 const Register = () => {
   const navigation = useNavigation();
   const theme = useTheme();
-  const [error, setError] = useState<string>('');
-  const [username, setUsername] = useState('');
-  const [emailAddress, setEmailAddress] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
+  const [emailAddress, setEmailAddress] = useState<string>();
+  const [password, setPassword] = useState<string>();
 
   /**
    * 前往登录
@@ -40,13 +38,12 @@ const Register = () => {
    */
   const onRegister = async () => {
     const result = await register({
-      username,
-      emailAddress,
-      password,
+      username: '',
+      emailAddress: emailAddress || '',
+      password: password || '',
     });
 
     if (!result.data) {
-      setError(result.errors?.find(() => true)?.message || '');
       return;
     }
 
@@ -54,33 +51,21 @@ const Register = () => {
   };
 
   /**
-   * 变更
+   * 邮箱地址发生变更
    */
-  const onUsernameChange = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
-    setError('');
-    setUsername(e.nativeEvent.text);
-  };
-
   const onEmailAddressChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
-    setError('');
     setEmailAddress(e.nativeEvent.text);
   };
 
+  /**
+   * 密码发生变更
+   */
   const onPasswordChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
-    setError('');
     setPassword(e.nativeEvent.text);
-  };
-  const onRepeatPasswordChange = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
-    setError('');
-    setRepeatPassword(e.nativeEvent.text);
   };
 
   /**
@@ -90,87 +75,70 @@ const Register = () => {
     Linking.openURL('https://fantufantu.com/privacy');
   };
 
+  /**
+   * 邮箱地址校验
+   */
+  const emailAddressError = useMemo(() => {
+    if (emailAddress === undefined) {
+      return;
+    }
+
+    if (!emailAddress) {
+      return '请输入邮箱地址';
+    }
+  }, [emailAddress]);
+
+  /**
+   * 密码校验
+   */
+  const passwordError = useMemo(() => {
+    return password;
+  }, [password]);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingTop: 64,
-        paddingBottom: 32,
-        paddingHorizontal: 32,
-        justifyContent: 'space-between',
-      }}>
+    <ScrollView
+      contentContainerStyle={{
+        padding: 32,
+      }}
+      showsVerticalScrollIndicator={false}>
       {/* 标题 */}
-      <View>
+      <View
+        style={{
+          marginBottom: 32,
+        }}>
         <Text style={styles.title}>Create your</Text>
         <Text style={styles.title}>Account</Text>
       </View>
 
-      <View>
-        <TextInput
-          // autoFocus={true}
-          value={username}
-          mode="outlined"
-          label="用户名"
-          placeholder="请输入用户名"
-          onChange={onUsernameChange}
-          error={!!error}
-          theme={{
-            roundness: 28,
-          }}
-        />
-
-        <HelperText type="error" visible={!!error} padding="none">
-          {error}
-        </HelperText>
-
+      <View
+        style={{
+          marginBottom: 32,
+        }}>
         <TextInput
           mode="outlined"
           value={emailAddress}
-          label="邮箱地址"
-          placeholder="请输入邮箱地址"
+          placeholder="邮箱地址"
           onChange={onEmailAddressChange}
-          error={!!error}
-          theme={{
-            roundness: 28,
-          }}
+          autoCapitalize="none"
+          error={!!emailAddressError}
         />
 
-        <HelperText type="error" visible={!!error} padding="none">
-          {error}
+        <HelperText type="error" visible={!!emailAddressError} padding="none">
+          {emailAddressError}
         </HelperText>
 
         <TextInput
           mode="outlined"
           value={password}
-          label="密码"
-          placeholder="请输入密码"
+          placeholder="密码"
           onChange={onPasswordChange}
-          error={!!error}
+          autoCapitalize="none"
+          error={!!passwordError}
           secureTextEntry
-          theme={{
-            roundness: 28,
-          }}
         />
 
-        <HelperText type="error" visible={!!error} padding="none">
-          {error}
-        </HelperText>
-
-        <TextInput
-          mode="outlined"
-          value={repeatPassword}
-          label="二次确认密码"
-          placeholder="请输入二次确认密码"
-          onChange={onRepeatPasswordChange}
-          error={!!error}
-          secureTextEntry
-          theme={{
-            roundness: 28,
-          }}
-        />
-
-        <HelperText type="error" visible={!!error} padding="none">
-          {error}
+        <HelperText type="error" visible={!!passwordError} padding="none">
+          {passwordError}
         </HelperText>
 
         <Button
@@ -210,7 +178,7 @@ const Register = () => {
           </Text>
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
