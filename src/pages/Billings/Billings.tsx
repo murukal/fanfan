@@ -59,15 +59,11 @@ const Billings = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-      }}>
+    <SafeAreaView>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingTop: 16,
+          padding: 16,
         }}>
         {data?.billings.map(item => renderBilling(item))}
 

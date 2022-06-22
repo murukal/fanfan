@@ -37,8 +37,7 @@ const Unsign = () => {
     <SafeAreaView>
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingTop: 16,
+          padding: 16,
           alignItems: 'center',
         }}>
         <Image
