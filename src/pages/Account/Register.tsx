@@ -158,7 +158,13 @@ const Register = () => {
    * 密码校验
    */
   const passwordError = useMemo(() => {
-    return password;
+    if (password === undefined) {
+      return;
+    }
+
+    if (!password) {
+      return '请输入密码';
+    }
   }, [password]);
 
   /**
