@@ -1,5 +1,5 @@
 import {useMutation} from '@apollo/client';
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   Linking,
   NativeSyntheticEvent,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInputChangeEventData,
   View,
+  TextInput as NativeTextInput,
 } from 'react-native';
 import {
   Button,
@@ -15,9 +16,9 @@ import {
   TextInput,
   useTheme,
 } from 'react-native-paper';
-import {REGISTER} from '../../apis/auth';
+import {REGISTER, SEND_CAPTCHA} from '../../apis/auth';
 import {AppID} from '../../assets';
-import {reinitialize} from '../../utils';
+import {Notify, reinitialize} from '../../utils';
 import {useNavigation} from '../../utils/navigation';
 
 const Register = () => {
@@ -25,11 +26,42 @@ const Register = () => {
   const theme = useTheme();
   const [emailAddress, setEmailAddress] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [captcha, setCaptcha] = useState<string>();
+  const [isPasswordVisiable, setIsPasswordVisiable] = useState(false);
+  const [count, setCount] = useState(60);
+  const [isTiming, setIsTiming] = useState(false);
   const [register] = useMutation(REGISTER, {
     context: {
       appId: AppID.Boomemory,
     },
   });
+  const [sendCaptcha] = useMutation(SEND_CAPTCHA, {
+    context: {
+      appId: AppID.Boomemory,
+    },
+  });
+
+  /**
+   * 执行倒计时
+   */
+  useEffect(() => {
+    if (!isTiming) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setCount(prevCount => {
+        if (prevCount <= 1) {
+          clearInterval(interval);
+          return 60;
+        } else {
+          return prevCount - 1;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isTiming]);
 
   /**
    * 前往登录
@@ -47,12 +79,15 @@ const Register = () => {
     const res = await register({
       variables: {
         registerInput: {
-          username: '',
           emailAddress: emailAddress || '',
+          captcha: captcha || '',
           password: password || '',
         },
       },
-    }).catch(() => {
+    }).catch((error: Error) => {
+      Notify.error({
+        title: error.message,
+      });
       return null;
     });
 
@@ -78,6 +113,15 @@ const Register = () => {
   };
 
   /**
+   * 输入验证码
+   */
+  const onCaptchaChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    setCaptcha(e.nativeEvent.text);
+  };
+
+  /**
    * 查询隐私政策
    */
   const onViewPrivacy = () => {
@@ -98,11 +142,64 @@ const Register = () => {
   }, [emailAddress]);
 
   /**
+   * 验证码校验
+   */
+  const captchaError = useMemo(() => {
+    if (captcha === undefined) {
+      return;
+    }
+
+    if (!captcha) {
+      return '请输入验证码';
+    }
+  }, [captcha]);
+
+  /**
    * 密码校验
    */
   const passwordError = useMemo(() => {
     return password;
   }, [password]);
+
+  /**
+   * 发送验证
+   */
+  const onSendCaptcha = async () => {
+    const res = await sendCaptcha({
+      variables: {
+        emailAddress: emailAddress || '',
+      },
+    }).catch((error: Error) => {
+      Notify.error({
+        title: error.message,
+      });
+      return null;
+    });
+
+    if (!res?.data?.sendCaptcha) {
+      return;
+    }
+
+    setIsTiming(true);
+  };
+
+  /**
+   * 发送验证码触发器
+   */
+  const CaptchaTrigger = useMemo(() => {
+    if (!isTiming) {
+      return (
+        <Button
+          disabled={!emailAddress || !!emailAddressError}
+          onPress={onSendCaptcha}>
+          发送验证码
+        </Button>
+      );
+    }
+
+    return <Text>{`${count} 秒后重新获取`}</Text>;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTiming, count, emailAddress, emailAddressError]);
 
   return (
     <ScrollView
@@ -130,10 +227,51 @@ const Register = () => {
           onChange={onEmailAddressChange}
           autoCapitalize="none"
           error={!!emailAddressError}
+          render={props => {
+            const {style, ...otherProps} = props;
+
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <NativeTextInput
+                  {...otherProps}
+                  style={[
+                    ...style,
+                    {
+                      flex: 1,
+                    },
+                  ]}
+                />
+                <View
+                  style={{
+                    paddingRight: 8,
+                  }}>
+                  {CaptchaTrigger}
+                </View>
+              </View>
+            );
+          }}
         />
 
         <HelperText type="error" visible={!!emailAddressError} padding="none">
           {emailAddressError}
+        </HelperText>
+
+        <TextInput
+          mode="outlined"
+          value={captcha}
+          placeholder="验证码"
+          onChange={onCaptchaChange}
+          autoCapitalize="none"
+          error={!!captchaError}
+        />
+
+        <HelperText type="error" visible={!!captchaError} padding="none">
+          {captchaError}
         </HelperText>
 
         <TextInput
@@ -143,7 +281,15 @@ const Register = () => {
           onChange={onPasswordChange}
           autoCapitalize="none"
           error={!!passwordError}
-          secureTextEntry
+          secureTextEntry={!isPasswordVisiable}
+          right={
+            <TextInput.Icon
+              onPress={() => {
+                setIsPasswordVisiable(prev => !prev);
+              }}
+              name={isPasswordVisiable ? 'eye' : 'eye-off'}
+            />
+          }
         />
 
         <HelperText type="error" visible={!!passwordError} padding="none">

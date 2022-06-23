@@ -8,9 +8,11 @@ import {
 } from 'react-native';
 import {Text, TextInput, Button, useTheme} from 'react-native-paper';
 import Checkbox from '../../components/Checkbox';
-import {login} from '../../apis/auth';
-import {errorsNotify, reinitialize} from '../../utils';
+import {LOGIN} from '../../apis/auth';
+import {Notify, reinitialize} from '../../utils';
 import {useNavigation} from '../../utils/navigation';
+import {useMutation} from '@apollo/client';
+import {AppID} from '../../assets';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -18,6 +20,11 @@ const Login = () => {
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
   const [isAutoLogin, setIsAutoLogin] = useState(false);
+  const [login] = useMutation(LOGIN, {
+    context: {
+      appId: AppID.Boomemory,
+    },
+  });
 
   /**
    * 前往注册
@@ -57,17 +64,21 @@ const Login = () => {
    * 登录
    */
   const onLogin = async () => {
-    const result = await login({
-      keyword,
-      password,
+    const res = await login({
+      variables: {
+        loginInput: {
+          keyword,
+          password,
+        },
+      },
+    }).catch((error: Error) => {
+      Notify.error({
+        title: error.message,
+      });
+      return null;
     });
 
-    if (!result.data) {
-      errorsNotify(result.errors);
-      return;
-    }
-
-    reinitialize(result.data.login, isAutoLogin);
+    reinitialize(res?.data?.login, isAutoLogin);
   };
 
   return (
@@ -94,12 +105,8 @@ const Login = () => {
           value={keyword}
           onChange={onKeywordChange}
           mode="outlined"
-          label="用户名/邮箱"
-          placeholder="请输入用户名/邮箱"
+          placeholder="用户名/邮箱"
           autoCapitalize="none"
-          theme={{
-            roundness: 28,
-          }}
           style={{
             marginBottom: 12,
           }}
@@ -109,13 +116,9 @@ const Login = () => {
           value={password}
           onChange={onPasswordChange}
           mode="outlined"
-          label="密码"
-          placeholder="请输入密码"
+          placeholder="密码"
           secureTextEntry
           autoCapitalize="none"
-          theme={{
-            roundness: 28,
-          }}
         />
 
         <View

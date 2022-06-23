@@ -37,7 +37,6 @@ import Billings from './src/pages/Billings';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Transaction from './src/pages/Transaction';
-import Snackbars from './src/components/Snackbars';
 import Transactions from './src/pages/Transactions';
 import Users from './src/pages/Users';
 
@@ -149,7 +148,6 @@ const App = () => {
       <StoreProvider store={store}>
         <PaperProvider theme={CombinedDefaultTheme}>
           <Routes />
-          <Snackbars />
         </PaperProvider>
       </StoreProvider>
     </ApolloProvider>

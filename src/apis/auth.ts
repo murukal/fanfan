@@ -2,14 +2,12 @@
 import {gql} from '@apollo/client';
 import type {TypedDocumentNode} from '@apollo/client';
 // project
-import {fetcher} from '.';
-import type {LoginInput, RegisterInput} from '../typings/auth';
-import {AppID} from '../assets';
+import type {LoginInput, RegisterInput, SendCaptchaArgs} from '../typings/auth';
 
 /**
  * 登录
  */
-const LOGIN: TypedDocumentNode<
+export const LOGIN: TypedDocumentNode<
   {
     login: string;
   },
@@ -21,17 +19,6 @@ const LOGIN: TypedDocumentNode<
     login(loginInput: $loginInput)
   }
 `;
-
-export const login = (loginInput: LoginInput) =>
-  fetcher.mutate({
-    mutation: LOGIN,
-    variables: {
-      loginInput,
-    },
-    context: {
-      appId: AppID.Boomemory,
-    },
-  });
 
 /**
  * 注册
@@ -46,5 +33,19 @@ export const REGISTER: TypedDocumentNode<
 > = gql`
   mutation Register($registerInput: RegisterInput!) {
     register(registerInput: $registerInput)
+  }
+`;
+
+/**
+ * 发送验证码
+ */
+export const SEND_CAPTCHA: TypedDocumentNode<
+  {
+    sendCaptcha: Date;
+  },
+  SendCaptchaArgs
+> = gql`
+  mutation SendCaptcha($emailAddress: String!) {
+    sendCaptcha(emailAddress: $emailAddress)
   }
 `;

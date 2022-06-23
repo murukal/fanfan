@@ -1,12 +1,12 @@
 import {store} from '../redux';
-import {initialized, notify, setRsaPublicKey} from '../redux/app';
+import {initialized, setRsaPublicKey} from '../redux/app';
 import {
   authenticate,
   setToken,
   logout as logoutAction,
 } from '../redux/user-profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {GraphQLError} from 'graphql';
+import {Alert} from 'react-native';
 
 export const TOKEN_KEY = 'FANFAN_TOKEN';
 
@@ -45,21 +45,6 @@ export const reinitialize = async (token?: string, isAutoLogin?: boolean) => {
 };
 
 /**
- * graphql的错误消息展示
- */
-export const errorsNotify = (errors?: ReadonlyArray<GraphQLError>) => {
-  const dispatch = store.dispatch;
-
-  // 提交store
-  dispatch(
-    notify({
-      type: 'error',
-      message: errors?.find(() => true)?.message || '',
-    }),
-  );
-};
-
-/**
  * 退出登陆
  */
 export const logout = async () => {
@@ -68,4 +53,18 @@ export const logout = async () => {
   const dispatch = store.dispatch;
   // 退出登陆
   dispatch(logoutAction());
+};
+
+export interface NotifyOptions {
+  title: string;
+  message?: string;
+}
+
+/**
+ * 消息提醒
+ */
+export const Notify = {
+  error: (options: NotifyOptions) => {
+    Alert.alert(options.title, options.message);
+  },
 };

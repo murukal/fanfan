@@ -10,13 +10,26 @@ export interface User extends Core {
   };
 }
 
+/**
+ * 登录入参
+ */
 export interface LoginInput {
   keyword: string;
   password: string;
 }
 
+/**
+ * 注册入参
+ */
 export interface RegisterInput {
-  username: string;
   emailAddress: string;
+  captcha: string;
   password: string;
+}
+
+/**
+ * 发送验证码参数
+ */
+export interface SendCaptchaArgs {
+  emailAddress: string;
 }
