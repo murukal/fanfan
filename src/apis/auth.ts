@@ -36,7 +36,7 @@ export const login = (loginInput: LoginInput) =>
 /**
  * 注册
  */
-const REGISTER: TypedDocumentNode<
+export const REGISTER: TypedDocumentNode<
   {
     register: string;
   },
@@ -48,14 +48,3 @@ const REGISTER: TypedDocumentNode<
     register(registerInput: $registerInput)
   }
 `;
-
-export const register = (registerInput: RegisterInput) =>
-  fetcher.mutate({
-    mutation: REGISTER,
-    variables: {
-      registerInput,
-    },
-    context: {
-      appId: AppID.Boomemory,
-    },
-  });

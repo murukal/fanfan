@@ -1,3 +1,4 @@
+import {useMutation} from '@apollo/client';
 import React, {useMemo, useState} from 'react';
 import {
   Linking,
@@ -14,7 +15,8 @@ import {
   TextInput,
   useTheme,
 } from 'react-native-paper';
-import {register} from '../../apis/auth';
+import {REGISTER} from '../../apis/auth';
+import {AppID} from '../../assets';
 import {reinitialize} from '../../utils';
 import {useNavigation} from '../../utils/navigation';
 
@@ -23,6 +25,11 @@ const Register = () => {
   const theme = useTheme();
   const [emailAddress, setEmailAddress] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [register] = useMutation(REGISTER, {
+    context: {
+      appId: AppID.Boomemory,
+    },
+  });
 
   /**
    * 前往登录
@@ -37,17 +44,19 @@ const Register = () => {
    * 登录
    */
   const onRegister = async () => {
-    const result = await register({
-      username: '',
-      emailAddress: emailAddress || '',
-      password: password || '',
+    const res = await register({
+      variables: {
+        registerInput: {
+          username: '',
+          emailAddress: emailAddress || '',
+          password: password || '',
+        },
+      },
+    }).catch(() => {
+      return null;
     });
 
-    if (!result.data) {
-      return;
-    }
-
-    reinitialize(result.data.register, true);
+    reinitialize(res?.data?.register, true);
   };
 
   /**
