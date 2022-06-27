@@ -20,15 +20,13 @@ import {
 } from 'react-native';
 import {useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useQuery} from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import {CATEGORIES} from '../../apis/category';
 import {Category} from '../../typings/category';
 import {TransactionProp} from '../../typings/navigation';
-import {create, update} from '../../apis/transaction';
-import {errorsNotify} from '../../utils';
+import {CREATE, UPDATE} from '../../apis/transaction';
+import {Notify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
-import {useDispatch} from 'react-redux';
-import {notify} from '../../redux/app';
 import {Direction, DirectionDescription} from '../../assets/transaction';
 
 const Transaction = () => {
@@ -39,7 +37,9 @@ const Transaction = () => {
     params: {id, billingId},
   } = useRoute<TransactionProp>();
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+
+  const [create] = useMutation(CREATE);
+  const [update] = useMutation(UPDATE);
 
   /**
    * 请求分类
@@ -85,42 +85,51 @@ const Transaction = () => {
    */
   const onSubmit = async () => {
     if (!categoryId || !amount || isNaN(Number(amount))) {
-      dispatch(
-        notify({
-          type: 'error',
-          message: '请填写必须信息！',
-        }),
-      );
+      Notify.error({
+        title: '请填写必须信息！',
+      });
       return;
     }
 
     const handlers = {
       create: () =>
         create({
-          amount: Number(amount),
-          billingId: billingId,
-          categoryId,
-          direction,
+          variables: {
+            createTransactionInput: {
+              amount: Number(amount),
+              billingId: billingId,
+              categoryId,
+              direction,
+            },
+          },
         }),
       update: () =>
-        update(id as number, {
-          amount: Number(amount),
-          categoryId,
-          direction,
+        update({
+          variables: {
+            id: id as number,
+            updateTransactionInput: {
+              amount: Number(amount),
+              categoryId,
+              direction,
+            },
+          },
         }),
     };
 
-    const result = await handlers[id ? 'update' : 'create']();
-
-    if (!result.data) {
-      errorsNotify(result.errors);
-      return;
-    }
+    const res = await handlers[id ? 'update' : 'create']().catch(
+      (error: Error) => {
+        Notify.error({
+          title: error.message,
+        });
+        return null;
+      },
+    );
 
     // 创建完成进入当前账本的交易明细页面
-    navigation.navigate('Transactions', {
-      billingId,
-    });
+    res?.data &&
+      navigation.navigate('Transactions', {
+        billingId,
+      });
   };
 
   /**

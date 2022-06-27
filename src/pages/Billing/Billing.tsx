@@ -1,13 +1,13 @@
-import {useQuery} from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import React, {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Divider, useTheme} from 'react-native-paper';
 import {Props} from '.';
-import {BILLING, remove} from '../../apis/billing';
+import {BILLING, REMOVE} from '../../apis/billing';
 import {TargetType} from '../../apis/share';
 import {BillingCard} from '../../components/Billing';
 import {BillingProp} from '../../typings/navigation';
-import {errorsNotify} from '../../utils';
+import {Notify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
 
 const Billing = (props: Props) => {
@@ -26,6 +26,8 @@ const Billing = (props: Props) => {
       id,
     },
   });
+
+  const [remove] = useMutation(REMOVE);
 
   /**
    * 查看交易明细
@@ -52,15 +54,19 @@ const Billing = (props: Props) => {
    */
   const onDelete = async () => {
     // 账本创建人操作，删除账本
-    const result = await remove(id);
-
-    if (!result.data) {
-      errorsNotify(result.errors);
-      return;
-    }
+    const res = await remove({
+      variables: {
+        id,
+      },
+    }).catch((error: Error) => {
+      Notify.error({
+        title: error.message,
+      });
+      return null;
+    });
 
     // 删除成功后跳转到账本list页面
-    navigation.navigate('Billings');
+    res?.data?.removeBilling && navigation.navigate('Billings');
   };
 
   return (

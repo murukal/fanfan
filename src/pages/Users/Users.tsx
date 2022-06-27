@@ -1,4 +1,4 @@
-import {useQuery} from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -20,8 +20,8 @@ import {
 import {User} from '../../typings/auth';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import {UsersProp} from '../../typings/navigation';
-import {create} from '../../apis/share';
-import {errorsNotify} from '../../utils';
+import {CREATE} from '../../apis/share';
+import {Notify} from '../../utils';
 
 const AvatarSize = 48;
 
@@ -32,6 +32,8 @@ const Users = () => {
     params: {fromId, fromType, checkedIds: checkedIdsFromProps},
   } = useRoute<UsersProp>();
   const navigation = useNavigation();
+
+  const [create] = useMutation(CREATE);
 
   useEffect(() => {
     setCheckedIds(checkedIdsFromProps);
@@ -110,21 +112,26 @@ const Users = () => {
    * 提交选择
    */
   const onSubmit = async () => {
-    const result = await create({
-      targetId: fromId,
-      targetType: fromType,
-      sharedByIds: checkedIds,
+    const res = await create({
+      variables: {
+        createShareInput: {
+          targetId: fromId,
+          targetType: fromType,
+          sharedByIds: checkedIds,
+        },
+      },
+    }).catch((error: Error) => {
+      Notify.error({
+        title: error.message,
+      });
+      return null;
     });
-
-    if (!result.data) {
-      errorsNotify(result.errors);
-      return;
-    }
 
     // 分享成功后跳转到账本页面ƒ
-    navigation.navigate(fromType, {
-      id: fromId,
-    });
+    res?.data?.createShare &&
+      navigation.navigate(fromType, {
+        id: fromId,
+      });
   };
 
   return (

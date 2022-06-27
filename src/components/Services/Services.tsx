@@ -5,16 +5,22 @@ import {useSelector} from 'react-redux';
 import {State} from '../../redux';
 import {useNavigation} from '../../utils/navigation';
 
+// 图片资源引入
+const transactionImage = require('../../../public/images/transaction.jpeg');
+const billingsImage = require('../../../public/images/billings.jpeg');
+const wantImage = require('../../../public/images/want.jpeg');
+const todoImage = require('../../../public/images/todo.jpeg');
+
 const Services = () => {
   const navigation = useNavigation();
   const billingId = useSelector<State, number | undefined>(
-    state => state.userProfile.user?.moneyProfile.defaultBilling?.id,
+    state => state.userProfile.user?.moneyProfile?.defaultBilling?.id,
   );
 
   const services = [
     {
       title: '新建交易',
-      image: require('../../../public/images/transaction.jpeg'),
+      image: transactionImage,
       onPress: () => {
         // 未设置默认账本
         if (!billingId) {
@@ -28,19 +34,19 @@ const Services = () => {
     },
     {
       title: '我的账本',
-      image: require('../../../public/images/billings.jpeg'),
+      image: billingsImage,
       onPress: () => {
         navigation.navigate('Billings');
       },
     },
     {
       title: '心愿单',
-      image: require('../../../public/images/want.jpeg'),
+      image: wantImage,
       onPress: () => {},
     },
     {
       title: '记事本',
-      image: require('../../../public/images/todo.jpeg'),
+      image: todoImage,
       onPress: () => {},
     },
   ];

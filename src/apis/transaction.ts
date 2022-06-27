@@ -11,7 +11,7 @@ import {
 /**
  * 创建交易
  */
-const CREATE: TypedDocumentNode<
+export const CREATE: TypedDocumentNode<
   {
     createTransaction: Transaction;
   },
@@ -40,7 +40,7 @@ export const create = (createTransactionInput: CreateTransactionInput) =>
 /**
  * 更新交易
  */
-const UPDATE: TypedDocumentNode<
+export const UPDATE: TypedDocumentNode<
   {
     updateTransaction: boolean;
   },

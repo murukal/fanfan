@@ -21,7 +21,7 @@ export const initialize = async () => {
   await dispatch(authenticate());
   // 在redux中存储rsa公钥
   await dispatch(setRsaPublicKey());
-  // 在redux中存储应用初始化标识
+  // 在redux中存储应用初始化标识;
   dispatch(initialized());
 };
 

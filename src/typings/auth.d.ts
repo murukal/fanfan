@@ -5,7 +5,7 @@ export interface User extends Core {
   username: string;
   emailAddress: string;
   avatar: string;
-  moneyProfile: {
+  moneyProfile?: {
     defaultBilling?: Billing;
   };
 }

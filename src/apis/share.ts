@@ -1,5 +1,4 @@
 import {gql, TypedDocumentNode} from '@apollo/client';
-import {fetcher} from '.';
 import {CreateShareInput} from '../typings/share';
 
 export enum TargetType {
@@ -9,7 +8,7 @@ export enum TargetType {
 /**
  * 创建分享
  */
-const CREATE_SHARE: TypedDocumentNode<
+export const CREATE: TypedDocumentNode<
   {
     createShare: boolean;
   },
@@ -21,11 +20,3 @@ const CREATE_SHARE: TypedDocumentNode<
     createShare(createShareInput: $createShareInput)
   }
 `;
-
-export const create = (createShareInput: CreateShareInput) =>
-  fetcher.mutate({
-    mutation: CREATE_SHARE,
-    variables: {
-      createShareInput,
-    },
-  });

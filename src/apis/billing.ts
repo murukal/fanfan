@@ -82,7 +82,7 @@ export const BILLING: TypedDocumentNode<
 /**
  * 删除账本
  */
-const REMOVE: TypedDocumentNode<
+export const REMOVE: TypedDocumentNode<
   {
     removeBilling: boolean;
   },
@@ -94,11 +94,3 @@ const REMOVE: TypedDocumentNode<
     removeBilling(id: $id)
   }
 `;
-
-export const remove = (id: number) =>
-  fetcher.mutate({
-    mutation: REMOVE,
-    variables: {
-      id,
-    },
-  });
