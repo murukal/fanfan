@@ -28,8 +28,8 @@ const Billings = () => {
    */
   const onCreateBilling = async () => {
     // 未登录跳转登录页面
-    if (!userProfile.isLogin) {
-      navigation.navigate('Account');
+    if (!userProfile.isLoggedIn) {
+      navigation.navigate('Login');
       return;
     }
 

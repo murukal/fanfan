@@ -19,18 +19,14 @@ const Unsign = () => {
    * 注册
    */
   const onGo2SignUp = () => {
-    navigation.navigate('Account', {
-      screen: 'Register',
-    });
+    navigation.navigate('Register');
   };
 
   /**
    * 登陆
    */
   const onGo2SignIn = () => {
-    navigation.navigate('Account', {
-      screen: 'Login',
-    });
+    navigation.navigate('Login');
   };
 
   return (

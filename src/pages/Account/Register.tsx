@@ -67,9 +67,7 @@ const Register = () => {
    * 前往登录
    */
   const onGo2Login = () => {
-    navigation.navigate('Account', {
-      screen: 'Login',
-    });
+    navigation.navigate('Login');
   };
 
   /**

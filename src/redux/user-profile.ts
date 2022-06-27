@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TOKEN_KEY} from '../utils';
 
 export class UserProfile {
-  isLogin = false;
+  isLoggedIn = false;
   user?: User = undefined;
   token: string | null = null;
 }
@@ -24,7 +24,7 @@ const slice = createSlice({
   initialState: {...new UserProfile()},
   reducers: {
     logout: state => {
-      state.isLogin = false;
+      state.isLoggedIn = false;
       state.user = undefined;
       state.token = '';
     },
@@ -32,7 +32,7 @@ const slice = createSlice({
   extraReducers: builder =>
     builder
       .addCase(authenticate.fulfilled, (state, action) => {
-        state.isLogin = !!action.payload;
+        state.isLoggedIn = !!action.payload;
         state.user = action.payload;
       })
       .addCase(setToken.fulfilled, (state, action) => {

@@ -30,9 +30,7 @@ const Login = () => {
    * 前往注册
    */
   const onGo2Register = () => {
-    navigation.navigate('Account', {
-      screen: 'Register',
-    });
+    navigation.navigate('Register');
   };
 
   /**

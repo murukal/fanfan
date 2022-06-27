@@ -35,12 +35,6 @@ export type NavigationMetadata = NavigationProp<{
       }
     | undefined;
 
-  Account:
-    | {
-        screen: 'Login' | 'Register';
-      }
-    | undefined;
-
   Billings: undefined;
 
   Billing: BillingProp;
@@ -50,4 +44,8 @@ export type NavigationMetadata = NavigationProp<{
   Transactions: TransactionsProp;
 
   Users: UsersProp | undefined;
+
+  Login: undefined;
+
+  Register: undefined;
 }>;

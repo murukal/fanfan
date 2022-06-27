@@ -4,13 +4,14 @@ import {useSelector} from 'react-redux';
 import {State} from '../../redux';
 import {NavigationContainer} from '@react-navigation/native';
 import Layout from '../../layouts/Layout';
-import Account from '../../layouts/Account';
 import Billings from '../../pages/Billings';
-// import Billing from '../../pages/Billing';
-// import Transaction from '../../pages/Transaction';
-// import Transactions from '../../pages/Transactions';
-// import Users from '../../pages/Users';
+import Billing from '../../pages/Billing';
+import Transaction from '../../pages/Transaction';
+import Transactions from '../../pages/Transactions';
+import Users from '../../pages/Users';
 import {combinedDefaultTheme} from '.';
+import Login from '../../pages/Account/Login';
+import Register from '../../pages/Account/Register';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,14 +44,6 @@ const Routes = () => {
         />
 
         <Stack.Screen
-          name={Account.name}
-          component={Account}
-          options={{
-            headerShown: false,
-          }}
-        />
-
-        <Stack.Screen
           name={Billings.name}
           component={Billings}
           options={{
@@ -58,37 +51,54 @@ const Routes = () => {
           }}
         />
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name={Billing.name}
           component={Billing}
           options={{
             title: '账本',
           }}
-        /> */}
+        />
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name={Transaction.name}
           component={Transaction}
           options={{
             title: '交易',
           }}
-        /> */}
+        />
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name={Transactions.name}
           component={Transactions}
           options={{
             title: '交易明细',
           }}
-        /> */}
+        />
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name={Users.name}
           component={Users}
           options={{
             title: '用户列表',
           }}
-        /> */}
+        />
+
+        {/* 鉴权路由 */}
+        <Stack.Screen
+          name={Login.name}
+          component={Login}
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name={Register.name}
+          component={Register}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

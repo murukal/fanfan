@@ -6,8 +6,8 @@ import Signed from './Signed';
 import Unsign from './Unsign';
 
 const Setting = () => {
-  const isLogin = useSelector<State, Boolean>(
-    state => state.userProfile.isLogin,
+  const isLoggedIn = useSelector<State, Boolean>(
+    state => state.userProfile.isLoggedIn,
   );
 
   return (
@@ -19,7 +19,7 @@ const Setting = () => {
         style={{
           padding: 16,
         }}>
-        {isLogin ? <Signed /> : <Unsign />}
+        {isLoggedIn ? <Signed /> : <Unsign />}
       </ScrollView>
     </SafeAreaView>
   );
