@@ -17,6 +17,7 @@ const Login = () => {
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordVisiable, setIsPasswordVisiable] = useState(false);
   const [isAutoLogin, setIsAutoLogin] = useState(false);
   const [login] = useMutation(LOGIN, {
     context: {
@@ -113,8 +114,16 @@ const Login = () => {
           onChange={onPasswordChange}
           mode="outlined"
           placeholder="密码"
-          secureTextEntry
+          secureTextEntry={!isPasswordVisiable}
           autoCapitalize="none"
+          right={
+            <TextInput.Icon
+              onPress={() => {
+                setIsPasswordVisiable(prev => !prev);
+              }}
+              name={isPasswordVisiable ? 'eye' : 'eye-off'}
+            />
+          }
         />
 
         <View
