@@ -1,5 +1,4 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {getRsaPublicKey} from '../apis';
+import {createSlice} from '@reduxjs/toolkit';
 
 export interface Notification {
   type: 'success' | 'error' | 'info';
@@ -12,10 +11,6 @@ export class App {
   rsaPublicKey?: string;
 }
 
-export const setRsaPublicKey = createAsyncThunk('setRsaPublicKey', async () => {
-  return (await getRsaPublicKey()).data?.rsaPublicKey;
-});
-
 const slice = createSlice({
   name: 'App',
   initialState: {...new App()},
@@ -24,10 +19,6 @@ const slice = createSlice({
       state.isInitialized = true;
     },
   },
-  extraReducers: builder =>
-    builder.addCase(setRsaPublicKey.fulfilled, (state, action) => {
-      state.rsaPublicKey = action.payload;
-    }),
 });
 
 export const {initialized} = slice.actions;

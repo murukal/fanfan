@@ -1,5 +1,5 @@
 import {store} from '../redux';
-import {initialized, setRsaPublicKey} from '../redux/app';
+import {initialized} from '../redux/app';
 import {
   authenticate,
   setToken,
@@ -19,8 +19,6 @@ export const initialize = async () => {
   await dispatch(setToken());
   // 用户信息
   await dispatch(authenticate());
-  // 在redux中存储rsa公钥
-  await dispatch(setRsaPublicKey());
   // 在redux中存储应用初始化标识;
   dispatch(initialized());
 };

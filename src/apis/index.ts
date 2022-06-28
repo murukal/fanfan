@@ -5,13 +5,11 @@ import {
   ApolloQueryResult,
   createHttpLink,
   FetchResult,
-  gql,
   InMemoryCache,
   MutationOptions,
   NetworkStatus,
   OperationVariables,
   QueryOptions,
-  TypedDocumentNode,
 } from '@apollo/client';
 import {setContext} from '@apollo/client/link/context';
 // project
@@ -81,17 +79,3 @@ export const fetcher = {
       }),
     ),
 };
-
-/** 获取RSA公钥 */
-const RSA_PUBLIC_KEY: TypedDocumentNode<{
-  rsaPublicKey: string;
-}> = gql`
-  query RsaPublicKey {
-    rsaPublicKey
-  }
-`;
-
-export const getRsaPublicKey = () =>
-  fetcher.query({
-    query: RSA_PUBLIC_KEY,
-  });
