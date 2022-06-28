@@ -2,6 +2,10 @@ import {gql, TypedDocumentNode} from '@apollo/client';
 import {CreateShareInput} from '../typings/share';
 
 export enum TargetType {
+  Billing = 'Billing',
+}
+
+export enum ToPath {
   Billing = 'billing',
 }
 

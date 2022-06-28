@@ -20,7 +20,7 @@ import {
 import {User} from '../../typings/auth';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import {UsersProp} from '../../typings/navigation';
-import {CREATE} from '../../apis/share';
+import {CREATE, ToPath} from '../../apis/share';
 import {Notify} from '../../utils';
 
 const AvatarSize = 48;
@@ -129,7 +129,7 @@ const Users = () => {
 
     // 分享成功后跳转到账本页面ƒ
     res?.data?.createShare &&
-      navigation.navigate(fromType, {
+      navigation.navigate(ToPath[fromType], {
         id: fromId,
       });
   };
