@@ -20,6 +20,10 @@ const Routes = () => {
     state => state.app.isInitialized,
   );
 
+  const isLoggedIn = useSelector<State, boolean>(
+    state => state.userProfile.isLoggedIn,
+  );
+
   // 应用未初始化，返回骨架屏
   if (!isInitialized) {
     return null;
@@ -84,21 +88,25 @@ const Routes = () => {
         />
 
         {/* 鉴权路由 */}
-        <Stack.Screen
-          name="login"
-          component={Login}
-          options={{
-            title: '登录',
-          }}
-        />
+        {!isLoggedIn && (
+          <Stack.Group>
+            <Stack.Screen
+              name="login"
+              component={Login}
+              options={{
+                title: '登录',
+              }}
+            />
 
-        <Stack.Screen
-          name="register"
-          component={Register}
-          options={{
-            title: '注册',
-          }}
-        />
+            <Stack.Screen
+              name="register"
+              component={Register}
+              options={{
+                title: '注册',
+              }}
+            />
+          </Stack.Group>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
