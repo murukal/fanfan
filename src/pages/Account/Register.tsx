@@ -306,7 +306,7 @@ const Register = () => {
             height: 56,
           }}
           style={{
-            borderRadius: 9999,
+            borderRadius: 99,
           }}>
           注 册
         </Button>
@@ -316,24 +316,27 @@ const Register = () => {
       <View
         style={{
           alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'center',
         }}>
-        <Text>
-          已有账号？前往{' '}
-          <Text
-            onPress={onGo2Login}
-            style={{
-              color: theme.colors.primary,
-            }}>
-            登陆{' '}
-          </Text>
-          查看{' '}
-          <Text
-            onPress={onViewPrivacy}
-            style={{
-              color: theme.colors.primary,
-            }}>
-            隐私政策
-          </Text>
+        <Text>已有账号？前往 </Text>
+
+        <Text
+          onPress={onGo2Login}
+          style={{
+            color: theme.colors.primary,
+          }}>
+          登陆
+        </Text>
+
+        <Text> 查看 </Text>
+
+        <Text
+          onPress={onViewPrivacy}
+          style={{
+            color: theme.colors.primary,
+          }}>
+          隐私政策
         </Text>
       </View>
     </ScrollView>

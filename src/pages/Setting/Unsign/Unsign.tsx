@@ -32,8 +32,9 @@ const Unsign = () => {
   return (
     <SafeAreaView>
       <ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          padding: 16,
+          padding: 20,
           alignItems: 'center',
         }}>
         <Image
@@ -100,6 +101,9 @@ const Unsign = () => {
           <Caption>Don't have an account?</Caption>
 
           <Button
+            style={{
+              marginLeft: 2,
+            }}
             uppercase={false}
             compact
             labelStyle={{

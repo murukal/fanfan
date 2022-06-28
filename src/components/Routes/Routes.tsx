@@ -96,7 +96,7 @@ const Routes = () => {
           name="register"
           component={Register}
           options={{
-            headerShown: false,
+            title: '注册',
           }}
         />
       </Stack.Navigator>

@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {Text, TextInput, Button, useTheme} from 'react-native-paper';
-// import Checkbox from '../../components/Checkbox';
+import Checkbox from '../../components/Checkbox';
 import {LOGIN} from '../../apis/auth';
 import {Notify, reinitialize} from '../../utils';
 import {useNavigation} from '../../utils/navigation';
@@ -17,7 +17,7 @@ const Login = () => {
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
-  const [isAutoLogin] = useState(false);
+  const [isAutoLogin, setIsAutoLogin] = useState(false);
   const [login] = useMutation(LOGIN, {
     context: {
       appId: 'boomemory',
@@ -52,9 +52,9 @@ const Login = () => {
   /**
    * checkbox变更
    */
-  // const onIsAutoLoginChange = (autoLogin: boolean) => {
-  //   setIsAutoLogin(autoLogin);
-  // };
+  const onIsAutoLoginChange = (autoLogin: boolean) => {
+    setIsAutoLogin(autoLogin);
+  };
 
   /**
    * 登录
@@ -117,7 +117,7 @@ const Login = () => {
           autoCapitalize="none"
         />
 
-        {/* <View
+        <View
           style={{
             marginVertical: 12,
             flexDirection: 'row',
@@ -133,7 +133,7 @@ const Login = () => {
           />
 
           <Text>记住我</Text>
-        </View> */}
+        </View>
 
         <Button
           mode="contained"
@@ -142,7 +142,7 @@ const Login = () => {
             height: 56,
           }}
           style={{
-            borderRadius: 28,
+            borderRadius: 99,
           }}>
           登 录
         </Button>
