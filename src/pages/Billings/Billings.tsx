@@ -29,7 +29,9 @@ const Billings = () => {
   const onCreateBilling = async () => {
     // 未登录跳转登录页面
     if (!userProfile.isLoggedIn) {
-      navigation.navigate('login');
+      navigation.navigate('layout', {
+        screen: 'setting',
+      });
       return;
     }
 

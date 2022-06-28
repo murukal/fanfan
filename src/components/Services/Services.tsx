@@ -10,12 +10,23 @@ const Services = () => {
   const billingId = useSelector<State, number | undefined>(
     state => state.userProfile.user?.moneyProfile?.defaultBilling?.id,
   );
+  const isLoggedIn = useSelector<State, boolean>(
+    state => state.userProfile.isLoggedIn,
+  );
 
   const services = [
     {
       title: '新建交易',
       image: require('../../../public/images/transaction.jpeg'),
       onPress: () => {
+        // 未登陆，跳转登陆
+        if (!isLoggedIn) {
+          navigation.navigate('layout', {
+            screen: 'setting',
+          });
+          return;
+        }
+
         // 未设置默认账本
         if (!billingId) {
           return;
