@@ -6,7 +6,7 @@ import {Billing} from '../../../typings/billing';
 
 const Default = () => {
   const defaultBilling = useSelector<State, Billing | undefined>(
-    state => state.userProfile.user?.moneyProfile.defaultBilling,
+    state => state.userProfile.user?.moneyProfile?.defaultBilling,
   );
 
   if (!defaultBilling) {
