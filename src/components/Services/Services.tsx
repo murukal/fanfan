@@ -3,6 +3,7 @@ import {Image, Pressable, View} from 'react-native';
 import {Text, Title} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {State} from '../../redux';
+import {Notify} from '../../utils';
 import {useNavigation} from '../../utils/navigation';
 
 const Services = () => {
@@ -29,6 +30,9 @@ const Services = () => {
 
         // 未设置默认账本
         if (!billingId) {
+          Notify.error({
+            title: '您还没有设置默认账本，请先设置默认账本',
+          });
           return;
         }
 
