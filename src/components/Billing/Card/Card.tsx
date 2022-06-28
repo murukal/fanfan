@@ -43,7 +43,7 @@ const Card = (props: Props) => {
    * 查看账单明细
    */
   const onGo2Billing = () => {
-    navigation.navigate('Billing', {
+    navigation.navigate('billing', {
       id: billing.id,
     });
   };

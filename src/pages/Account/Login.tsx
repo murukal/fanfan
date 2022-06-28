@@ -1,5 +1,4 @@
-import React from 'react';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {
   NativeSyntheticEvent,
   StyleSheet,
@@ -7,22 +6,21 @@ import {
   View,
 } from 'react-native';
 import {Text, TextInput, Button, useTheme} from 'react-native-paper';
-import Checkbox from '../../components/Checkbox';
+// import Checkbox from '../../components/Checkbox';
 import {LOGIN} from '../../apis/auth';
 import {Notify, reinitialize} from '../../utils';
 import {useNavigation} from '../../utils/navigation';
 import {useMutation} from '@apollo/client';
-import {AppID} from '../../assets';
 
 const Login = () => {
   const navigation = useNavigation();
   const theme = useTheme();
   const [keyword, setKeyword] = useState('');
   const [password, setPassword] = useState('');
-  const [isAutoLogin, setIsAutoLogin] = useState(false);
+  const [isAutoLogin] = useState(false);
   const [login] = useMutation(LOGIN, {
     context: {
-      appId: AppID.Boomemory,
+      appId: 'boomemory',
     },
   });
 
@@ -30,7 +28,7 @@ const Login = () => {
    * 前往注册
    */
   const onGo2Register = () => {
-    navigation.navigate('Register');
+    navigation.navigate('register');
   };
 
   /**
@@ -54,9 +52,9 @@ const Login = () => {
   /**
    * checkbox变更
    */
-  const onIsAutoLoginChange = (autoLogin: boolean) => {
-    setIsAutoLogin(autoLogin);
-  };
+  // const onIsAutoLoginChange = (autoLogin: boolean) => {
+  //   setIsAutoLogin(autoLogin);
+  // };
 
   /**
    * 登录
@@ -119,7 +117,7 @@ const Login = () => {
           autoCapitalize="none"
         />
 
-        <View
+        {/* <View
           style={{
             marginVertical: 12,
             flexDirection: 'row',
@@ -135,7 +133,7 @@ const Login = () => {
           />
 
           <Text>记住我</Text>
-        </View>
+        </View> */}
 
         <Button
           mode="contained"
@@ -144,7 +142,7 @@ const Login = () => {
             height: 56,
           }}
           style={{
-            borderRadius: 9999,
+            borderRadius: 28,
           }}>
           登 录
         </Button>
@@ -153,17 +151,18 @@ const Login = () => {
       {/* 跳转 */}
       <View
         style={{
+          flexDirection: 'row',
           alignItems: 'center',
+          justifyContent: 'center',
         }}>
-        <Text>
-          没有账号？前往{' '}
-          <Text
-            style={{
-              color: theme.colors.primary,
-            }}
-            onPress={onGo2Register}>
-            注册
-          </Text>
+        <Text>没有账号？前往 </Text>
+
+        <Text
+          style={{
+            color: theme.colors.primary,
+          }}
+          onPress={onGo2Register}>
+          注册
         </Text>
       </View>
     </View>

@@ -27,7 +27,7 @@ const Services = () => {
           return;
         }
 
-        navigation.navigate('Transaction', {
+        navigation.navigate('transaction', {
           billingId,
         });
       },
@@ -36,7 +36,7 @@ const Services = () => {
       title: '我的账本',
       image: billingsImage,
       onPress: () => {
-        navigation.navigate('Billings');
+        navigation.navigate('billings');
       },
     },
     {

@@ -135,7 +135,7 @@ const Transactions = () => {
    * 创建交易
    */
   const onCreate = () => {
-    navigation.navigate('Transaction', {
+    navigation.navigate('transaction', {
       billingId,
     });
   };

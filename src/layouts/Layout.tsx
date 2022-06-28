@@ -10,7 +10,7 @@ const Layout = () => {
   return (
     <Tab.Navigator initialRouteName={Home.name} labeled={false}>
       <Tab.Screen
-        name={Home.name}
+        name="home"
         component={Home}
         options={{
           tabBarIcon: ({color}) => (
@@ -19,7 +19,7 @@ const Layout = () => {
         }}
       />
       <Tab.Screen
-        name={Setting.name}
+        name="setting"
         component={Setting}
         options={{
           tabBarIcon: ({color}) => (

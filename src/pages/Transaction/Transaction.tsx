@@ -127,7 +127,7 @@ const Transaction = () => {
 
     // 创建完成进入当前账本的交易明细页面
     res?.data &&
-      navigation.navigate('Transactions', {
+      navigation.navigate('transactions', {
         billingId,
       });
   };

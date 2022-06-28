@@ -14,8 +14,8 @@ const Welcome = () => {
   const navigation = useNavigation();
 
   const onGo2Setting = () => {
-    navigation.navigate('Layout', {
-      screen: 'Setting',
+    navigation.navigate('layout', {
+      screen: 'setting',
     });
   };
 

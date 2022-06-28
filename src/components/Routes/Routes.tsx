@@ -34,9 +34,9 @@ const Routes = () => {
           },
           headerBackTitleVisible: false,
         })}
-        initialRouteName={Layout.name}>
+        initialRouteName="layout">
         <Stack.Screen
-          name={Layout.name}
+          name="layout"
           component={Layout}
           options={{
             headerShown: false,
@@ -44,7 +44,7 @@ const Routes = () => {
         />
 
         <Stack.Screen
-          name={Billings.name}
+          name="billings"
           component={Billings}
           options={{
             title: '我的账本',
@@ -52,7 +52,7 @@ const Routes = () => {
         />
 
         <Stack.Screen
-          name={Billing.name}
+          name="billing"
           component={Billing}
           options={{
             title: '账本',
@@ -60,7 +60,7 @@ const Routes = () => {
         />
 
         <Stack.Screen
-          name={Transaction.name}
+          name="transaction"
           component={Transaction}
           options={{
             title: '交易',
@@ -68,7 +68,7 @@ const Routes = () => {
         />
 
         <Stack.Screen
-          name={Transactions.name}
+          name="transactions"
           component={Transactions}
           options={{
             title: '交易明细',
@@ -76,7 +76,7 @@ const Routes = () => {
         />
 
         <Stack.Screen
-          name={Users.name}
+          name="users"
           component={Users}
           options={{
             title: '用户列表',
@@ -85,15 +85,15 @@ const Routes = () => {
 
         {/* 鉴权路由 */}
         <Stack.Screen
-          name={Login.name}
+          name="login"
           component={Login}
           options={{
-            headerShown: false,
+            title: '登录',
           }}
         />
 
         <Stack.Screen
-          name={Register.name}
+          name="register"
           component={Register}
           options={{
             headerShown: false,

@@ -33,7 +33,7 @@ const Billing = (props: Props) => {
    * 查看交易明细
    */
   const onGo2Transactions = () => {
-    navigation.navigate('Transactions', {
+    navigation.navigate('transactions', {
       billingId: id,
     });
   };
@@ -42,7 +42,7 @@ const Billing = (props: Props) => {
    * 分享账单
    */
   const onShare = () => {
-    navigation.navigate('Users', {
+    navigation.navigate('users', {
       fromType: TargetType.Billing,
       fromId: id,
       checkedIds: billing?.billing.shares?.map(share => share.sharedById) || [],
@@ -66,7 +66,7 @@ const Billing = (props: Props) => {
     });
 
     // 删除成功后跳转到账本list页面
-    res?.data?.removeBilling && navigation.navigate('Billings');
+    res?.data?.removeBilling && navigation.navigate('billings');
   };
 
   return (

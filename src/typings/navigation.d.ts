@@ -29,23 +29,23 @@ export interface UsersProp {
  * 路由的ts声明
  */
 export type NavigationMetadata = NavigationProp<{
-  Layout:
+  layout:
     | {
-        screen: 'Home' | 'Setting';
+        screen: 'home' | 'setting';
       }
     | undefined;
 
-  Billings: undefined;
+  billings: undefined;
 
-  Billing: BillingProp;
+  billing: BillingProp;
 
-  Transaction: TransactionProp;
+  transaction: TransactionProp;
 
-  Transactions: TransactionsProp;
+  transactions: TransactionsProp;
 
-  Users: UsersProp | undefined;
+  users: UsersProp | undefined;
 
-  Login: undefined;
+  login: undefined;
 
-  Register: undefined;
+  register: undefined;
 }>;

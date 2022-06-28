@@ -17,7 +17,6 @@ import {
   useTheme,
 } from 'react-native-paper';
 import {REGISTER, SEND_CAPTCHA} from '../../apis/auth';
-import {AppID} from '../../assets';
 import {Notify, reinitialize} from '../../utils';
 import {useNavigation} from '../../utils/navigation';
 
@@ -32,12 +31,12 @@ const Register = () => {
   const [isTiming, setIsTiming] = useState(false);
   const [register] = useMutation(REGISTER, {
     context: {
-      appId: AppID.Boomemory,
+      appId: 'boomemory',
     },
   });
   const [sendCaptcha] = useMutation(SEND_CAPTCHA, {
     context: {
-      appId: AppID.Boomemory,
+      appId: 'boomemory',
     },
   });
 
@@ -67,7 +66,7 @@ const Register = () => {
    * 前往登录
    */
   const onGo2Login = () => {
-    navigation.navigate('Login');
+    navigation.navigate('login');
   };
 
   /**

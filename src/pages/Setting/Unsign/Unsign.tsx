@@ -19,14 +19,14 @@ const Unsign = () => {
    * 注册
    */
   const onGo2SignUp = () => {
-    navigation.navigate('Register');
+    navigation.navigate('register');
   };
 
   /**
    * 登陆
    */
   const onGo2SignIn = () => {
-    navigation.navigate('Login');
+    navigation.navigate('login');
   };
 
   return (

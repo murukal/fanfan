@@ -29,13 +29,13 @@ const Billings = () => {
   const onCreateBilling = async () => {
     // 未登录跳转登录页面
     if (!userProfile.isLoggedIn) {
-      navigation.navigate('Login');
+      navigation.navigate('login');
       return;
     }
 
     // 创建账本
     await createBilling({
-      name: 'cceshi',
+      name: '测试',
     });
 
     refetch();
