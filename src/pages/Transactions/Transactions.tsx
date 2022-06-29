@@ -96,7 +96,8 @@ const Transactions = () => {
   const onFetchMore = async () => {
     const nextPage = page + 1;
 
-    const result = await fetchMore({
+    // 尝试获取下一页
+    const res = await fetchMore({
       variables: {
         paginateInput: {
           page: nextPage,
@@ -105,14 +106,15 @@ const Transactions = () => {
       },
     });
 
-    if (!result.data || !result.data.transactions.items?.length) {
+    // 下一页没有数据，不做任何处理
+    if (!res.data.transactions.items?.length) {
       return;
     }
 
     // 获取数据成功
     setPage(nextPage);
     setTransactions(existedTransactions =>
-      (existedTransactions || []).concat(result.data.transactions.items || []),
+      (existedTransactions || []).concat(res.data.transactions.items || []),
     );
   };
 
@@ -146,7 +148,7 @@ const Transactions = () => {
         flex: 1,
       }}>
       <FlatList
-        style={{
+        contentContainerStyle={{
           padding: 16,
         }}
         ListHeaderComponent={() => (
