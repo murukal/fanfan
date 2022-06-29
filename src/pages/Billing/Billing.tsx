@@ -69,6 +69,15 @@ const Billing = (props: Props) => {
     res?.data?.removeBilling && navigation.navigate('billings');
   };
 
+  /**
+   * 创建交易
+   */
+  const onCreateTransaction = () => {
+    navigation.navigate('transaction', {
+      billingId: id,
+    });
+  };
+
   return (
     <View
       style={{
@@ -113,10 +122,11 @@ const Billing = (props: Props) => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-around',
+          marginBottom: 16,
         }}>
         <Button
-          mode="contained"
-          style={styles.handler}
+          mode="outlined"
+          style={[styles.handler]}
           contentStyle={styles.handlerContent}
           onPress={onShare}>
           分 享
@@ -130,6 +140,18 @@ const Billing = (props: Props) => {
           删 除
         </Button>
       </View>
+
+      {/* 新建交易 */}
+      <Button
+        mode="contained"
+        contentStyle={styles.handlerContent}
+        onPress={onCreateTransaction}
+        style={{
+          borderRadius: 99,
+          marginHorizontal: 12,
+        }}>
+        记 一 笔
+      </Button>
     </View>
   );
 };
@@ -138,7 +160,7 @@ export default Billing;
 
 const styles = StyleSheet.create({
   handler: {
-    borderRadius: 24,
+    borderRadius: 99,
     flex: 1,
     marginHorizontal: 12,
   },

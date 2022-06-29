@@ -147,7 +147,7 @@ const Transaction = () => {
         flex: 1,
       }}>
       <ScrollView
-        style={{
+        contentContainerStyle={{
           padding: 16,
         }}>
         <TextInput
@@ -240,7 +240,6 @@ const Transaction = () => {
         <View
           style={{
             marginTop: 'auto',
-            paddingBottom: 16,
           }}>
           <Button
             icon="cash-register"
