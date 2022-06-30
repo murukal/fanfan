@@ -1,14 +1,17 @@
 import {useMutation, useQuery} from '@apollo/client';
 import React, {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, Divider, useTheme} from 'react-native-paper';
+import {Button, Caption, Divider, Switch, useTheme} from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
 import {Props} from '.';
-import {BILLING, REMOVE} from '../../apis/billing';
+import {BILLING, REMOVE, SWITCH_DEFAULT} from '../../apis/billing';
 import {TargetType} from '../../apis/share';
 import {BillingCard} from '../../components/Billing';
+import {State} from '../../redux';
 import {BillingProp} from '../../typings/navigation';
 import {Notify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
+import {authenticate} from '../../redux/user-profile';
 
 const Billing = (props: Props) => {
   const theme = useTheme();
@@ -27,7 +30,13 @@ const Billing = (props: Props) => {
     },
   });
 
+  const isDefault = useSelector<State, boolean>(
+    state => state.userProfile.user?.moneyProfile?.defaultBilling?.id === id,
+  );
+
   const [remove] = useMutation(REMOVE);
+  const [switchDefault] = useMutation(SWITCH_DEFAULT);
+  const dispatch = useDispatch();
 
   /**
    * 查看交易明细
@@ -78,6 +87,29 @@ const Billing = (props: Props) => {
     });
   };
 
+  /**
+   * 切换是否默认
+   */
+  const onIsDefaultToggle = async () => {
+    const res = await switchDefault({
+      variables: {
+        id,
+        isDefault: !isDefault,
+      },
+    }).catch(() => null);
+
+    // 切换失败
+    // 退出函数执行
+    if (!res?.data?.switchDefault) {
+      Notify.error({
+        title: '切换失败',
+      });
+      return;
+    }
+
+    await dispatch<any>(authenticate());
+  };
+
   return (
     <View
       style={{
@@ -110,6 +142,26 @@ const Billing = (props: Props) => {
           }}
         />
       )}
+
+      <Divider
+        style={{
+          marginBottom: 16,
+        }}
+      />
+
+      {/* 设置默认账本控件 */}
+      <View
+        style={{
+          marginBottom: 16,
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: 12,
+        }}>
+        <Caption>是否默认</Caption>
+        <Switch value={isDefault} onValueChange={onIsDefaultToggle} />
+      </View>
 
       <Divider
         style={{

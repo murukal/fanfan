@@ -94,3 +94,20 @@ export const REMOVE: TypedDocumentNode<
     removeBilling(id: $id)
   }
 `;
+
+/**
+ * 设置/取消 默认账本
+ */
+export const SWITCH_DEFAULT: TypedDocumentNode<
+  {
+    switchDefault: boolean;
+  },
+  {
+    id: number;
+    isDefault: boolean;
+  }
+> = gql`
+  mutation SwitchDefault($id: Int!, $isDefault: Boolean!) {
+    switchDefault(id: $id, isDefault: $isDefault)
+  }
+`;

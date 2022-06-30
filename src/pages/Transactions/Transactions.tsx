@@ -9,7 +9,7 @@ import {Transaction} from '../../typings/transaction';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import dayjs from 'dayjs';
-import {useNavigationState} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 const limit = 20;
 
@@ -24,10 +24,7 @@ const Transactions = () => {
   ]);
   const navigation = useNavigation();
   const [transactions, setTransactions] = useState<Transaction[]>();
-  const isFocused = navigation.isFocused();
-
-  // 路由切换，state会发生改变，引起组件的重新渲染，待优化
-  useNavigationState(state => state);
+  const isFocused = useIsFocused();
 
   /**
    * 获取当前账本下的交易明细
