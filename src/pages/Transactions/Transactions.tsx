@@ -1,5 +1,5 @@
-import {useQuery} from '@apollo/client';
-import React, {useState} from 'react';
+import {useLazyQuery} from '@apollo/client';
+import React, {useEffect, useState} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Button, Card, FAB, Text, Title} from 'react-native-paper';
 import {TRANSACTIONS} from '../../apis/transaction';
@@ -9,6 +9,7 @@ import {Transaction} from '../../typings/transaction';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import dayjs from 'dayjs';
+import {useNavigationState} from '@react-navigation/native';
 
 const limit = 20;
 
@@ -22,13 +23,16 @@ const Transactions = () => {
     Direction.Out,
   ]);
   const navigation = useNavigation();
-
   const [transactions, setTransactions] = useState<Transaction[]>();
+  const isFocused = navigation.isFocused();
+
+  // 路由切换，state会发生改变，引起组件的重新渲染，待优化
+  useNavigationState(state => state);
 
   /**
    * 获取当前账本下的交易明细
    */
-  const {fetchMore} = useQuery(TRANSACTIONS, {
+  const [fetchTransactions, {fetchMore}] = useLazyQuery(TRANSACTIONS, {
     variables: {
       filterInput: {
         billingId,
@@ -40,10 +44,23 @@ const Transactions = () => {
       },
     },
 
+    fetchPolicy: 'no-cache',
+
     onCompleted: data => {
       setTransactions(data.transactions.items);
     },
   });
+
+  /**
+   * 页面呈现时请求数据
+   */
+  useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+
+    fetchTransactions();
+  }, [isFocused, fetchTransactions]);
 
   /**
    * 渲染交易
@@ -207,6 +224,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     marginBottom: 16,
     marginHorizontal: 8,
+    borderWidth: 0,
   },
 
   directionContent: {

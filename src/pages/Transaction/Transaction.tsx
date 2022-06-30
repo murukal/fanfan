@@ -227,13 +227,11 @@ const Transaction = () => {
           </Title>
           <TextInput
             style={{
-              padding: 8,
+              padding: 4,
             }}
             multiline
             numberOfLines={4}
-            theme={{
-              roundness: 12,
-            }}
+            autoCapitalize="none"
           />
         </View>
 
