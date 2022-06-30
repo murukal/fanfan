@@ -26,11 +26,19 @@ import {Notify} from '../../utils';
 const AvatarSize = 48;
 
 const Users = () => {
-  const {data: users} = useQuery(USERS);
-  const [checkedIds, setCheckedIds] = React.useState<number[]>([]);
   const {
-    params: {fromId, fromType, checkedIds: checkedIdsFromProps},
+    params: {fromId, fromType, checkedIds: checkedIdsFromProps, excludeIds},
   } = useRoute<UsersProp>();
+
+  const {data: users} = useQuery(USERS, {
+    variables: {
+      filterInput: {
+        excludeIds,
+      },
+    },
+  });
+  const [checkedIds, setCheckedIds] = React.useState<number[]>([]);
+
   const navigation = useNavigation();
 
   const [create] = useMutation(CREATE);

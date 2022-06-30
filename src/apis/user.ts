@@ -2,15 +2,21 @@ import {gql, TypedDocumentNode} from '@apollo/client';
 import {fetcher} from '.';
 import {PaginateOutput} from '../typings';
 import {User} from '../typings/auth';
+import {FilterInput} from '../typings/user';
 
 /**
  * 获取用户列表
  */
-export const USERS: TypedDocumentNode<{
-  users: PaginateOutput<User>;
-}> = gql`
-  query Users {
-    users {
+export const USERS: TypedDocumentNode<
+  {
+    users: PaginateOutput<User>;
+  },
+  {
+    filterInput: FilterInput;
+  }
+> = gql`
+  query Users($filterInput: FilterUserInput!) {
+    users(filterInput: $filterInput) {
       items {
         id
         avatar

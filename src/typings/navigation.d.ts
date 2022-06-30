@@ -23,6 +23,7 @@ export interface UsersProp {
   fromType: TargetType;
   fromId: number;
   checkedIds: number[];
+  excludeIds?: number[];
 }
 
 /**

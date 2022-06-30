@@ -17,6 +17,9 @@ const Billing = (props: Props) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const {params} = useRoute<BillingProp>();
+  const myId = useSelector<State, number | undefined>(
+    (state: State) => state.userProfile.user?.id,
+  );
 
   // 账本id
   const id = useMemo(
@@ -55,6 +58,11 @@ const Billing = (props: Props) => {
       fromType: TargetType.Billing,
       fromId: id,
       checkedIds: billing?.billing.shares?.map(share => share.sharedById) || [],
+      excludeIds: ([] as number[])
+        .concat(
+          billing?.billing.createdById ? [billing.billing.createdById] : [],
+        )
+        .concat(myId ? [myId] : []),
     });
   };
 
