@@ -89,9 +89,12 @@ export const TRANSACTION: TypedDocumentNode<
   query Transaction($id: Int!) {
     transaction(id: $id) {
       id
-      billingId
-      categoryId
+      direction
+      category {
+        id
+      }
       amount
+      remark
     }
   }
 `;

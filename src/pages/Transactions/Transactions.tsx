@@ -65,13 +65,21 @@ const Transactions = () => {
   const renderTransaction = ({item}: {item: Transaction}) => {
     const date = dayjs(item.createdAt);
 
+    const onGo2Detail = () => {
+      navigation.navigate('transaction', {
+        id: item.id,
+        billingId,
+      });
+    };
+
     return (
       <Card
         style={{
           marginHorizontal: 4,
           marginBottom: 16,
           borderRadius: 16,
-        }}>
+        }}
+        onPress={onGo2Detail}>
         <Card.Content
           style={{
             flexDirection: 'row',

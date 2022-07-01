@@ -287,7 +287,7 @@ const Transaction = () => {
             style={{
               borderRadius: 12,
             }}>
-            创建交易
+            {id ? '更新' : '创建'}交易
           </Button>
         </View>
       </ScrollView>
