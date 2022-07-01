@@ -1,5 +1,5 @@
-import {useMutation, useQuery} from '@apollo/client';
-import React, {useMemo} from 'react';
+import {useLazyQuery, useMutation} from '@apollo/client';
+import React, {useEffect, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Caption, Divider, Switch, useTheme} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -12,6 +12,7 @@ import {BillingProp} from '../../typings/navigation';
 import {Notify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import {authenticate} from '../../redux/user-profile';
+import {useIsFocused} from '@react-navigation/native';
 
 const Billing = (props: Props) => {
   const theme = useTheme();
@@ -20,6 +21,7 @@ const Billing = (props: Props) => {
   const myId = useSelector<State, number | undefined>(
     (state: State) => state.userProfile.user?.id,
   );
+  const isFocused = useIsFocused();
 
   // 账本id
   const id = useMemo(
@@ -27,11 +29,20 @@ const Billing = (props: Props) => {
     [params?.id, props.id],
   );
 
-  const {data: billing} = useQuery(BILLING, {
+  const [getBilling, {data: billing}] = useLazyQuery(BILLING, {
     variables: {
       id,
     },
+    fetchPolicy: 'no-cache',
   });
+
+  /**
+   * 进入账本页面
+   * 重新获取账本信息
+   */
+  useEffect(() => {
+    getBilling();
+  }, [isFocused, getBilling]);
 
   const isDefault = useSelector<State, boolean>(
     state => state.userProfile.user?.moneyProfile?.defaultBilling?.id === id,
