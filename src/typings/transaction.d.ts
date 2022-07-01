@@ -8,12 +8,13 @@ export interface Transaction {
   direction: Direction;
   category: Category;
   createdAt: string;
+  remark?: string;
 }
 
 export interface CreateTransactionInput
   extends Pick<
     Transaction,
-    'billingId' | 'categoryId' | 'amount' | 'direction'
+    'billingId' | 'categoryId' | 'amount' | 'direction' | 'remark'
   > {}
 
 export interface UpdateTransactionInput

@@ -1,5 +1,4 @@
 import {gql, TypedDocumentNode} from '@apollo/client';
-import {fetcher} from '.';
 import {PaginateInput, PaginateOutput} from '../typings';
 import {
   CreateTransactionInput,
@@ -29,14 +28,6 @@ export const CREATE: TypedDocumentNode<
   }
 `;
 
-export const create = (createTransactionInput: CreateTransactionInput) =>
-  fetcher.mutate({
-    mutation: CREATE,
-    variables: {
-      createTransactionInput,
-    },
-  });
-
 /**
  * 更新交易
  */
@@ -53,18 +44,6 @@ export const UPDATE: TypedDocumentNode<
     updateTransaction(id: $id, updateTransactionInput: $updateTransactionInput)
   }
 `;
-
-export const update = (
-  id: number,
-  updateTransactionInput: UpdateTransactionInput,
-) =>
-  fetcher.mutate({
-    mutation: UPDATE,
-    variables: {
-      id,
-      updateTransactionInput,
-    },
-  });
 
 /**
  * 查询交易
@@ -92,6 +71,27 @@ export const TRANSACTIONS: TypedDocumentNode<
         createdAt
         amount
       }
+    }
+  }
+`;
+
+/**
+ * 查询交易明细
+ */
+export const TRANSACTION: TypedDocumentNode<
+  {
+    transaction: Transaction;
+  },
+  {
+    id: number;
+  }
+> = gql`
+  query Transaction($id: Int!) {
+    transaction(id: $id) {
+      id
+      billingId
+      categoryId
+      amount
     }
   }
 `;

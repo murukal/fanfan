@@ -7,39 +7,72 @@ import {
   Title,
   ToggleButton,
 } from 'react-native-paper';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
-  NativeSyntheticEvent,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   TextInput as NativeTextInput,
-  TextInputChangeEventData,
   View,
 } from 'react-native';
 import {useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useMutation, useQuery} from '@apollo/client';
+import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
 import {CATEGORIES} from '../../apis/category';
 import {Category} from '../../typings/category';
 import {TransactionProp} from '../../typings/navigation';
-import {CREATE, UPDATE} from '../../apis/transaction';
+import {CREATE, TRANSACTION, UPDATE} from '../../apis/transaction';
 import {Notify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import {Direction, DirectionDescription} from '../../assets/transaction';
+import {useIsFocused} from '@react-navigation/native';
 
 const Transaction = () => {
   const [direction, setDirection] = useState<Direction>(Direction.Out);
   const [categoryId, setCategoryId] = useState<number>();
   const [amount, setAmount] = useState<string>();
+  const [remark, setRemark] = useState<string>();
+
   const {
     params: {id, billingId},
   } = useRoute<TransactionProp>();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const [create] = useMutation(CREATE);
   const [update] = useMutation(UPDATE);
+  const [getTransaction] = useLazyQuery(TRANSACTION, {
+    fetchPolicy: 'no-cache',
+    onCompleted: data => {
+      setAmount(data.transaction.amount.toString());
+      setCategoryId(data.transaction.category.id);
+      setDirection(data.transaction.direction);
+      setRemark(data.transaction.remark);
+    },
+  });
+
+  useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+
+    // 设置初始值
+    if (!id) {
+      setDirection(Direction.Out);
+      setCategoryId(undefined);
+      setAmount(undefined);
+      setRemark(undefined);
+      return;
+    }
+
+    // 请求交易详情
+    getTransaction({
+      variables: {
+        id,
+      },
+    });
+  }, [isFocused, id, getTransaction]);
 
   /**
    * 请求分类
@@ -86,7 +119,7 @@ const Transaction = () => {
   const onSubmit = async () => {
     if (!categoryId || !amount || isNaN(Number(amount))) {
       Notify.error({
-        title: '请填写必须信息！',
+        title: '请填写必要信息，才可以创建交易',
       });
       return;
     }
@@ -100,6 +133,7 @@ const Transaction = () => {
               billingId: billingId,
               categoryId,
               direction,
+              remark,
             },
           },
         }),
@@ -111,6 +145,7 @@ const Transaction = () => {
               amount: Number(amount),
               categoryId,
               direction,
+              remark,
             },
           },
         }),
@@ -132,15 +167,6 @@ const Transaction = () => {
       });
   };
 
-  /**
-   * 金额变更
-   */
-  const onAmountChange = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
-    setAmount(e.nativeEvent.text);
-  };
-
   return (
     <SafeAreaView
       style={{
@@ -160,8 +186,6 @@ const Transaction = () => {
           theme={{
             roundness: 20,
           }}
-          value={amount}
-          onChange={onAmountChange}
           render={props => {
             return (
               <View
@@ -181,7 +205,12 @@ const Transaction = () => {
                   {DirectionDescription[direction]}
                 </Chip>
                 <MaterialCommunityIcons name="currency-cny" size={20} />
-                <NativeTextInput {...props} keyboardType="numeric" />
+                <NativeTextInput
+                  {...props}
+                  keyboardType="numeric"
+                  value={amount}
+                  onChangeText={text => setAmount(text)}
+                />
               </View>
             );
           }}
@@ -232,6 +261,8 @@ const Transaction = () => {
             multiline
             numberOfLines={4}
             autoCapitalize="none"
+            value={remark}
+            onChangeText={text => setRemark(text)}
           />
         </View>
 
