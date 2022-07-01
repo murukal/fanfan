@@ -261,8 +261,15 @@ const Transaction = () => {
             multiline
             numberOfLines={4}
             autoCapitalize="none"
-            value={remark}
-            onChangeText={text => setRemark(text)}
+            render={props => {
+              return (
+                <NativeTextInput
+                  {...props}
+                  value={remark}
+                  onChangeText={text => setRemark(text)}
+                />
+              );
+            }}
           />
         </View>
 
