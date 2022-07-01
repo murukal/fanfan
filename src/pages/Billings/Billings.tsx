@@ -1,7 +1,7 @@
-import {useQuery} from '@apollo/client';
+import {useLazyQuery, useMutation} from '@apollo/client';
 import {SafeAreaView, ScrollView, View} from 'react-native';
-import {BILLINGS, createBilling} from '../../apis/billing';
-import React from 'react';
+import {BILLINGS, CREATE} from '../../apis/billing';
+import React, {useEffect} from 'react';
 import {BillingCard} from '../../components/Billing';
 import {Billing} from '../../typings/billing';
 import {Button} from 'react-native-paper';
@@ -9,19 +9,29 @@ import {useSelector} from 'react-redux';
 import {State} from '../../redux';
 import {UserProfile} from '../../redux/user-profile';
 import {useNavigation} from '../../utils/navigation';
+import {useIsFocused} from '@react-navigation/native';
 
 const Billings = () => {
   const navigation = useNavigation();
   const userProfile = useSelector<State, UserProfile>(
     state => state.userProfile,
   );
+  const [create] = useMutation(CREATE);
+  const isFocused = useIsFocused();
 
   /**
    * 获取账本
    */
-  const {data, refetch} = useQuery(BILLINGS, {
+  const [getBillings, {data, refetch}] = useLazyQuery(BILLINGS, {
     fetchPolicy: 'no-cache',
   });
+
+  useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+    getBillings();
+  }, [isFocused, getBillings]);
 
   /**
    * 创建账本
@@ -36,8 +46,12 @@ const Billings = () => {
     }
 
     // 创建账本
-    await createBilling({
-      name: '测试',
+    await create({
+      variables: {
+        createBillingInput: {
+          name: '测试',
+        },
+      },
     });
 
     refetch();
@@ -61,7 +75,10 @@ const Billings = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{

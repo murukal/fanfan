@@ -60,6 +60,9 @@ const Users = () => {
     });
   };
 
+  /**
+   * 用户条目的渲染
+   */
   const renderUser = ({item, index}: ListRenderItemInfo<User>) => {
     const isChecked = checkedIds.includes(item.id);
 
@@ -135,7 +138,7 @@ const Users = () => {
       return null;
     });
 
-    // 分享成功后跳转到账本页面ƒ
+    // 分享成功后跳转到账本页面
     res?.data?.createShare &&
       navigation.navigate(ToPath[fromType], {
         id: fromId,

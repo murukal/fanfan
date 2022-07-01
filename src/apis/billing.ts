@@ -1,5 +1,4 @@
 import {gql, TypedDocumentNode} from '@apollo/client';
-import {fetcher} from '.';
 import {Billing, CreateBillingInput} from '../typings/billing';
 
 /**
@@ -12,6 +11,7 @@ export const BILLINGS: TypedDocumentNode<{
     billings {
       id
       name
+      createdAt
       createdBy {
         id
         username
@@ -23,7 +23,7 @@ export const BILLINGS: TypedDocumentNode<{
 /**
  * 创建账本
  */
-const CREATE_BILLING: TypedDocumentNode<
+export const CREATE: TypedDocumentNode<
   {
     createBilling: Billing;
   },
@@ -37,14 +37,6 @@ const CREATE_BILLING: TypedDocumentNode<
     }
   }
 `;
-
-export const createBilling = (createBillingInput: CreateBillingInput) =>
-  fetcher.mutate({
-    mutation: CREATE_BILLING,
-    variables: {
-      createBillingInput,
-    },
-  });
 
 /**
  * 获取账本
