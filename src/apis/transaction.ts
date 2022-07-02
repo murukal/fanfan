@@ -70,6 +70,11 @@ export const TRANSACTIONS: TypedDocumentNode<
         }
         createdAt
         amount
+        createdBy {
+          id
+          avatar
+          username
+        }
       }
     }
   }

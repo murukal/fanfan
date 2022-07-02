@@ -11,7 +11,7 @@ import {State} from '../../redux';
 import {BillingProp} from '../../typings/navigation';
 import {Notify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
-import {authenticate} from '../../redux/user-profile';
+import {updateMoneyProfile} from '../../redux/user-profile';
 import {useIsFocused} from '@react-navigation/native';
 
 const Billing = (props: Props) => {
@@ -126,7 +126,7 @@ const Billing = (props: Props) => {
       return;
     }
 
-    await dispatch<any>(authenticate());
+    await dispatch<any>(updateMoneyProfile());
   };
 
   return (

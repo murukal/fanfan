@@ -1,5 +1,4 @@
 import {gql, TypedDocumentNode} from '@apollo/client';
-import {fetcher} from '.';
 import {PaginateOutput} from '../typings';
 import {User} from '../typings/auth';
 import {FilterInput} from '../typings/user';
@@ -28,11 +27,35 @@ export const USERS: TypedDocumentNode<
 `;
 
 /**
+ * gql片段
+ * 定义通用字段
+ */
+const MONEY_PROFILE_FIELDS = gql`
+  fragment MoneyProfileFields on MoneyProfile {
+    defaultBilling {
+      id
+      name
+      createdBy {
+        id
+        username
+      }
+      shares {
+        sharedBy {
+          id
+          avatar
+        }
+      }
+    }
+  }
+`;
+
+/**
  * 获取用户信息
  */
-const WHO_AM_I: TypedDocumentNode<{
+export const WHO_AM_I: TypedDocumentNode<{
   whoAmI: User;
 }> = gql`
+  ${MONEY_PROFILE_FIELDS}
   query WhoAmI {
     whoAmI {
       id
@@ -40,28 +63,24 @@ const WHO_AM_I: TypedDocumentNode<{
       emailAddress
       avatar
       moneyProfile {
-        defaultBilling {
-          id
-          name
-          createdBy {
-            id
-            username
-          }
-          shares {
-            sharedBy {
-              id
-              avatar
-            }
-          }
-        }
+        ...MoneyProfileFields
       }
     }
   }
 `;
 
-// 强制不适用缓存
-export const whoAmI = async () =>
-  await fetcher.query({
-    query: WHO_AM_I,
-    fetchPolicy: 'no-cache',
-  });
+/**
+ * 更新用户信息下的记账模块信息
+ */
+export const MONEY_PROFILE: TypedDocumentNode<{
+  whoAmI: Pick<User, 'moneyProfile'>;
+}> = gql`
+  ${MONEY_PROFILE_FIELDS}
+  query WhoAmI {
+    whoAmI {
+      moneyProfile {
+        ...MoneyProfileFields
+      }
+    }
+  }
+`;

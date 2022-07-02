@@ -1,15 +1,14 @@
 import {useLazyQuery} from '@apollo/client';
 import React, {useEffect, useState} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Button, Card, FAB, Text, Title} from 'react-native-paper';
+import {Button, FAB} from 'react-native-paper';
 import {TRANSACTIONS} from '../../apis/transaction';
 import {Direction} from '../../assets/transaction';
 import {TransactionsProp} from '../../typings/navigation';
 import {Transaction} from '../../typings/transaction';
 import {useNavigation, useRoute} from '../../utils/navigation';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import dayjs from 'dayjs';
 import {useIsFocused} from '@react-navigation/native';
+import TransactionCard from '../../components/Transaction/Card';
 
 const limit = 20;
 
@@ -63,8 +62,6 @@ const Transactions = () => {
    * 渲染交易
    */
   const renderTransaction = ({item}: {item: Transaction}) => {
-    const date = dayjs(item.createdAt);
-
     const onGo2Detail = () => {
       navigation.navigate('transaction', {
         id: item.id,
@@ -72,44 +69,7 @@ const Transactions = () => {
       });
     };
 
-    return (
-      <Card
-        style={{
-          marginHorizontal: 4,
-          marginBottom: 16,
-          borderRadius: 16,
-        }}
-        onPress={onGo2Detail}>
-        <Card.Content
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          {/* 分类按钮 */}
-          <MaterialCommunityIcons
-            name={item.category.icon}
-            size={48}
-            style={{
-              marginRight: 24,
-            }}
-          />
-
-          {/* 交易时间 */}
-          <View>
-            <Title>{date.format('YYYY-MM-DD')}</Title>
-            <Text>{date.format('HH:mm:ss')}</Text>
-          </View>
-
-          {/* 交易金额 */}
-          <View
-            style={{
-              marginLeft: 'auto',
-            }}>
-            <Title>{item.amount}</Title>
-          </View>
-        </Card.Content>
-      </Card>
-    );
+    return <TransactionCard onPress={onGo2Detail} transaction={item} />;
   };
 
   /**

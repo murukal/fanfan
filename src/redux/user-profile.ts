@@ -1,8 +1,9 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {whoAmI} from '../apis/user';
+import {MONEY_PROFILE, WHO_AM_I} from '../apis/user';
 import {User} from '../typings/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TOKEN_KEY} from '../utils';
+import client from '../apis';
 
 export class UserProfile {
   isLoggedIn = false;
@@ -10,13 +11,43 @@ export class UserProfile {
   token: string | null = null;
 }
 
+/**
+ * token换用户信息
+ */
 export const authenticate = createAsyncThunk('authenticate', async () => {
-  return (await whoAmI()).data?.whoAmI;
+  return (
+    await client
+      .query({
+        query: WHO_AM_I,
+        fetchPolicy: 'no-cache',
+      })
+      .catch(() => null)
+  )?.data.whoAmI;
 });
 
+/**
+ * 存储token
+ */
 export const setToken = createAsyncThunk(
   'set-token',
   async (token?: string) => token || (await AsyncStorage.getItem(TOKEN_KEY)),
+);
+
+/**
+ * 更新用户的moneyProfile
+ */
+export const updateMoneyProfile = createAsyncThunk(
+  'update-money-profile',
+  async () => {
+    return (
+      await client
+        .query({
+          query: MONEY_PROFILE,
+          fetchPolicy: 'no-cache',
+        })
+        .catch(() => null)
+    )?.data.whoAmI;
+  },
 );
 
 const slice = createSlice({
@@ -37,6 +68,12 @@ const slice = createSlice({
       })
       .addCase(setToken.fulfilled, (state, action) => {
         state.token = action.payload;
+      })
+      .addCase(updateMoneyProfile.fulfilled, (state, action) => {
+        if (!state.user) {
+          return;
+        }
+        Object.assign(state.user, action.payload);
       }),
 });
 

@@ -22,6 +22,8 @@ import {useNavigation, useRoute} from '../../utils/navigation';
 import {UsersProp} from '../../typings/navigation';
 import {CREATE, ToPath} from '../../apis/share';
 import {Notify} from '../../utils';
+import {useDispatch} from 'react-redux';
+import {updateMoneyProfile} from '../../redux/user-profile';
 
 const AvatarSize = 48;
 
@@ -40,6 +42,7 @@ const Users = () => {
   const [checkedIds, setCheckedIds] = React.useState<number[]>([]);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [create] = useMutation(CREATE);
 
@@ -137,6 +140,8 @@ const Users = () => {
       });
       return null;
     });
+
+    await dispatch<any>(updateMoneyProfile());
 
     // 分享成功后跳转到账本页面
     res?.data?.createShare &&

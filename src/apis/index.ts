@@ -1,20 +1,8 @@
 // third
-import {
-  ApolloClient,
-  ApolloError,
-  ApolloQueryResult,
-  createHttpLink,
-  FetchResult,
-  InMemoryCache,
-  MutationOptions,
-  NetworkStatus,
-  OperationVariables,
-  QueryOptions,
-} from '@apollo/client';
+import {ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client';
 import {setContext} from '@apollo/client/link/context';
 // project
 import {store} from '../redux';
-import {GraphQLError} from 'graphql';
 import {AppID, AppLocation} from '../assets';
 
 const httpLink = createHttpLink({
@@ -57,25 +45,3 @@ const client = new ApolloClient({
 });
 
 export default client;
-
-export const fetcher = {
-  /** 查询 */
-  query: <T = any, V = OperationVariables>(options: QueryOptions<V, T>) =>
-    client.query<T, V>(options).catch(
-      (error: ApolloError): ApolloQueryResult<null> => ({
-        data: null,
-        error,
-        loading: false,
-        networkStatus: NetworkStatus.error,
-      }),
-    ),
-
-  /** 变更 */
-  mutate: <T = any, V = OperationVariables>(options: MutationOptions<T, V>) =>
-    client.mutate<T, V>(options).catch(
-      (error: GraphQLError): FetchResult<T> => ({
-        data: null,
-        errors: [error],
-      }),
-    ),
-};

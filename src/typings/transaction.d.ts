@@ -1,4 +1,5 @@
 import {Direction} from '../utils';
+import {User} from './auth';
 import {Category} from './category';
 
 export interface Transaction {
@@ -9,6 +10,7 @@ export interface Transaction {
   category: Category;
   createdAt: string;
   remark?: string;
+  createdBy: User;
 }
 
 export interface CreateTransactionInput
