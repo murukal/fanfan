@@ -27,7 +27,7 @@ const Card = (props: Props) => {
    */
   const isExpense = useMemo(
     () => props.transaction.direction === Direction.Out,
-    [props.transaction],
+    [props.transaction.direction],
   );
 
   return (
@@ -72,10 +72,25 @@ const Card = (props: Props) => {
             style={{
               flexDirection: 'row',
               marginVertical: 4,
+              alignItems: 'center',
             }}>
-            <Text>{createdAt.format('YYYY-MM-DD')}</Text>
-            <Text> | </Text>
-            <Text>{createdAt.format('HH:mm:ss')}</Text>
+            <Text
+              style={{
+                fontSize: 12,
+              }}>
+              {createdAt.format('MM-DD')}
+            </Text>
+
+            <Text
+              numberOfLines={1}
+              style={{
+                flex: 1,
+                marginHorizontal: 16,
+                fontSize: 12,
+                color: Colors.grey700,
+              }}>
+              {transaction.remark}
+            </Text>
 
             {/* 分类按钮 */}
             <MaterialCommunityIcons

@@ -75,6 +75,7 @@ export const TRANSACTIONS: TypedDocumentNode<
           avatar
           username
         }
+        remark
       }
     }
   }
