@@ -6,6 +6,7 @@ import {
   TextInput,
   Title,
   ToggleButton,
+  useTheme,
 } from 'react-native-paper';
 import React, {useEffect} from 'react';
 import {
@@ -22,7 +23,7 @@ import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
 import {CATEGORIES} from '../../apis/category';
 import {Category} from '../../typings/category';
 import {TransactionProp} from '../../typings/navigation';
-import {CREATE, TRANSACTION, UPDATE} from '../../apis/transaction';
+import {CREATE, REMOVE, TRANSACTION, UPDATE} from '../../apis/transaction';
 import {Notify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import {Direction, DirectionDescription} from '../../assets/transaction';
@@ -33,6 +34,7 @@ const Transaction = () => {
   const [categoryId, setCategoryId] = useState<number>();
   const [amount, setAmount] = useState<string>();
   const [remark, setRemark] = useState<string>();
+  const theme = useTheme();
 
   const {
     params: {id, billingId},
@@ -42,6 +44,7 @@ const Transaction = () => {
 
   const [create] = useMutation(CREATE);
   const [update] = useMutation(UPDATE);
+  const [remove] = useMutation(REMOVE);
   const [getTransaction] = useLazyQuery(TRANSACTION, {
     fetchPolicy: 'no-cache',
     onCompleted: data => {
@@ -167,6 +170,26 @@ const Transaction = () => {
       });
   };
 
+  /**
+   * 删除交易
+   */
+  const onRemove = async () => {
+    if (!id) {
+      return;
+    }
+
+    const res = await remove({
+      variables: {
+        id,
+      },
+    });
+
+    res?.data?.removeTransaction &&
+      navigation.navigate('transactions', {
+        billingId,
+      });
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -275,7 +298,7 @@ const Transaction = () => {
 
         <View
           style={{
-            marginTop: 'auto',
+            flexDirection: 'row',
           }}>
           <Button
             icon="cash-register"
@@ -284,11 +307,33 @@ const Transaction = () => {
             contentStyle={{
               height: 48,
             }}
-            style={{
-              borderRadius: 12,
-            }}>
-            {id ? '更新' : '创建'}交易
+            style={[
+              styles.trigger,
+              {
+                marginRight: 8,
+              },
+            ]}>
+            {id ? '改一下' : '记一笔'}
           </Button>
+
+          {id && (
+            <Button
+              icon="cash-register"
+              mode="contained"
+              color={theme.colors.error}
+              onPress={onRemove}
+              contentStyle={{
+                height: 48,
+              }}
+              style={[
+                styles.trigger,
+                {
+                  marginLeft: 8,
+                },
+              ]}>
+              删除
+            </Button>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -300,5 +345,10 @@ export default Transaction;
 const styles = StyleSheet.create({
   title: {
     fontWeight: '700',
+  },
+
+  trigger: {
+    borderRadius: 12,
+    flex: 1,
   },
 });

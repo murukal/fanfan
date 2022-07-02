@@ -104,3 +104,19 @@ export const TRANSACTION: TypedDocumentNode<
     }
   }
 `;
+
+/**
+ * 删除交易
+ */
+export const REMOVE: TypedDocumentNode<
+  {
+    removeTransaction: boolean;
+  },
+  {
+    id: number;
+  }
+> = gql`
+  mutation RemoveTransaction($id: Int!) {
+    removeTransaction(id: $id)
+  }
+`;
