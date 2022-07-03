@@ -3,6 +3,7 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import Home from '../pages/Home';
 import Setting from '../pages/Setting/Setting';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Overview from '../pages/Overview';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -18,6 +19,17 @@ const Layout = () => {
           ),
         }}
       />
+
+      <Tab.Screen
+        name="overview"
+        component={Overview}
+        options={{
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="chart-box" color={color} size={24} />
+          ),
+        }}
+      />
+
       <Tab.Screen
         name="setting"
         component={Setting}

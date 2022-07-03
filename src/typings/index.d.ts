@@ -16,3 +16,11 @@ export interface PaginateInput {
   page?: number;
   limit: number;
 }
+
+/**
+ * 时间范围入参
+ */
+export interface TimeRangeInput {
+  from: Date;
+  to: Date;
+}
