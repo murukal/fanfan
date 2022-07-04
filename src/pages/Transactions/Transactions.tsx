@@ -26,7 +26,7 @@ const Transactions = () => {
       style={{
         flex: 1,
       }}>
-      <TransactionsList billingId={billingId} />
+      <TransactionsList billingId={billingId} padding={16} />
 
       <FAB
         style={{

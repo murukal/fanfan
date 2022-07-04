@@ -32,11 +32,12 @@ const Card = (props: Props) => {
 
   return (
     <PaperCard
-      style={{
-        marginHorizontal: 4,
-        marginBottom: 16,
-        borderRadius: 16,
-      }}
+      style={[
+        {
+          borderRadius: 16,
+        },
+        props.style,
+      ]}
       onPress={props.onPress}>
       <PaperCard.Content
         style={{

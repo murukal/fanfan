@@ -33,16 +33,11 @@ const List = (props: Props) => {
         directions,
       },
       paginateInput: {
-        page,
+        page: 1,
         limit,
       },
     },
-
     fetchPolicy: 'no-cache',
-
-    onCompleted: data => {
-      setTransactions(data.transactions.items);
-    },
   });
 
   /**
@@ -53,13 +48,23 @@ const List = (props: Props) => {
       return;
     }
 
-    fetchTransactions();
+    fetchTransactions()
+      .catch(() => null)
+      .then(res => setTransactions(res?.data?.transactions.items));
+
+    setPage(1);
   }, [isFocused, fetchTransactions]);
 
   /**
    * 渲染交易
    */
-  const renderTransaction = ({item}: {item: Transaction}) => {
+  const renderTransaction = ({
+    item,
+    index,
+  }: {
+    item: Transaction;
+    index: number;
+  }) => {
     const onGo2Detail = () => {
       navigation.navigate('transaction', {
         id: item.id,
@@ -67,7 +72,15 @@ const List = (props: Props) => {
       });
     };
 
-    return <TransactionCard onPress={onGo2Detail} transaction={item} />;
+    const length = transactions?.length ?? 0;
+
+    return (
+      <TransactionCard
+        onPress={onGo2Detail}
+        transaction={item}
+        style={{marginBottom: length - 1 === index ? 0 : 16}}
+      />
+    );
   };
 
   /**
@@ -113,12 +126,13 @@ const List = (props: Props) => {
     setPage(1);
   };
 
-  return (
-    <FlatList
-      contentContainerStyle={{
-        padding: props.padding || 0,
-      }}
-      ListHeaderComponent={() => (
+  /**
+   * 头部组件
+   */
+  const ListHeaderComponent = useMemo(() => {
+    return (
+      <>
+        {props.ListHeaderComponent}
         <View
           style={{
             flexDirection: 'row',
@@ -141,7 +155,17 @@ const List = (props: Props) => {
             支出
           </Button>
         </View>
-      )}
+      </>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [directions, props.ListHeaderComponent]);
+
+  return (
+    <FlatList
+      contentContainerStyle={{
+        padding: props.padding || 0,
+      }}
+      ListHeaderComponent={ListHeaderComponent}
       data={transactions}
       renderItem={renderTransaction}
       showsVerticalScrollIndicator={false}
@@ -155,13 +179,14 @@ export default List;
 const styles = StyleSheet.create({
   direction: {
     flex: 1,
-    borderRadius: 24,
+    borderRadius: 99,
     marginBottom: 16,
     marginHorizontal: 8,
-    borderWidth: 0,
+    borderWidth: 2,
+    borderColor: '#007AFF',
   },
 
   directionContent: {
-    height: 48,
+    height: 40,
   },
 });
