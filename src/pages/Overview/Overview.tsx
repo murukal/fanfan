@@ -1,4 +1,5 @@
 import {useQuery} from '@apollo/client';
+import dayjs from 'dayjs';
 import React, {useMemo} from 'react';
 import {SafeAreaView, useWindowDimensions, View} from 'react-native';
 import {Button, Colors, Text} from 'react-native-paper';
@@ -45,11 +46,20 @@ const Overview = () => {
     );
   }, [data]);
 
+  /**
+   * 起始时间
+   */
+  const from = useMemo(
+    () => dayjs().subtract(1, 'day').startOf('day').toDate(),
+    [],
+  );
+
   return (
     <SafeAreaView>
       <TransactionList
         billingId={80}
         padding={gap}
+        timeRange={[from]}
         ListHeaderComponent={
           <>
             {/* 标题 */}

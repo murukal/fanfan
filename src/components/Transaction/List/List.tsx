@@ -29,6 +29,8 @@ const List = (props: Props) => {
       filterInput: {
         billingId,
         directions,
+        from: props.timeRange?.at(0),
+        to: props.timeRange?.at(1),
       },
       paginateInput: {
         page: 1,
