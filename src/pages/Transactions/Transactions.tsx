@@ -4,6 +4,7 @@ import {FAB} from 'react-native-paper';
 import {TransactionsProp} from '../../typings/navigation';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import TransactionsList from '../../components/Transaction/List';
+import {StackActions} from '@react-navigation/native';
 
 const Transactions = () => {
   const {
@@ -16,9 +17,11 @@ const Transactions = () => {
    * 创建交易
    */
   const onCreate = () => {
-    navigation.navigate('transaction', {
-      billingId,
-    });
+    navigation.dispatch(
+      StackActions.replace('transaction', {
+        billingId,
+      }),
+    );
   };
 
   return (

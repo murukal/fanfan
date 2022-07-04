@@ -27,7 +27,7 @@ import {CREATE, REMOVE, TRANSACTION, UPDATE} from '../../apis/transaction';
 import {Notify} from '../../utils';
 import {useNavigation, useRoute} from '../../utils/navigation';
 import {Direction, DirectionDescription} from '../../assets/transaction';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, StackActions} from '@react-navigation/native';
 
 const Transaction = () => {
   const [direction, setDirection] = useState<Direction>(Direction.Out);
@@ -165,9 +165,11 @@ const Transaction = () => {
 
     // 创建完成进入当前账本的交易明细页面
     res?.data &&
-      navigation.navigate('transactions', {
-        billingId,
-      });
+      navigation.dispatch(
+        StackActions.replace('transactions', {
+          billingId,
+        }),
+      );
   };
 
   /**
@@ -185,9 +187,11 @@ const Transaction = () => {
     });
 
     res?.data?.removeTransaction &&
-      navigation.navigate('transactions', {
-        billingId,
-      });
+      navigation.dispatch(
+        StackActions.replace('transactions', {
+          billingId,
+        }),
+      );
   };
 
   return (

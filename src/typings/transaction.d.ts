@@ -25,4 +25,6 @@ export interface UpdateTransactionInput
 export interface FilterTransactionInput {
   billingId: number;
   directions: Direction[];
+  from?: Date;
+  to?: Date;
 }
