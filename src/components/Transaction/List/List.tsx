@@ -1,5 +1,5 @@
 import {useLazyQuery} from '@apollo/client';
-import {useIsFocused} from '@react-navigation/native';
+import {StackActions, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-paper';
@@ -68,10 +68,12 @@ const List = (props: Props) => {
     index: number;
   }) => {
     const onGo2Detail = () => {
-      navigation.navigate('transaction', {
-        id: item.id,
-        billingId,
-      });
+      navigation.dispatch(
+        StackActions.replace('transaction', {
+          id: item.id,
+          billingId,
+        }),
+      );
     };
 
     const length = transactions?.length ?? 0;

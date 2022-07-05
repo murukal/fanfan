@@ -8,6 +8,8 @@ import Overview from '../pages/Overview';
 const Tab = createMaterialBottomTabNavigator();
 
 const Layout = () => {
+  const OverviewWrapper = () => <Overview />;
+
   return (
     <Tab.Navigator initialRouteName={Home.name} labeled={false}>
       <Tab.Screen
@@ -22,7 +24,7 @@ const Layout = () => {
 
       <Tab.Screen
         name="overview"
-        component={Overview}
+        component={OverviewWrapper}
         options={{
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="chart-box" color={color} size={24} />

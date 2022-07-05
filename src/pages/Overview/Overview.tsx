@@ -13,13 +13,23 @@ const Overview = () => {
   const chartSize = useMemo(() => windowWidth - gap * 2, [windowWidth]);
 
   /**
+   * 起始时间
+   */
+  const from = useMemo(
+    () => dayjs().subtract(7, 'day').startOf('day').toDate(),
+    [],
+  );
+
+  const to = useMemo(() => new Date(), []);
+
+  /**
    * 获取统计数据
    */
   const {data} = useQuery(CATEGORY_STATISTICS, {
     variables: {
       timeRangeInput: {
-        from: new Date('2020-01-01'),
-        to: new Date('2023-01-01'),
+        from,
+        to,
       },
     },
   });
@@ -35,24 +45,17 @@ const Overview = () => {
         prev.data.push({
           x: current.id,
           y: current.totalExpense,
+          title: current.name,
         });
         prev.colorScale.push(colors[Math.floor(Math.random() * colors.length)]);
         return prev;
       },
       {
-        data: [] as {x: number; y: number}[],
+        data: [] as {x: number; y: number; title: string}[],
         colorScale: [] as string[],
       },
     );
   }, [data]);
-
-  /**
-   * 起始时间
-   */
-  const from = useMemo(
-    () => dayjs().subtract(1, 'day').startOf('day').toDate(),
-    [],
-  );
 
   return (
     <SafeAreaView>
@@ -74,6 +77,7 @@ const Overview = () => {
 
               <Button mode="outlined">最近一周</Button>
             </View>
+
             {/* 统计图表 */}
             <VictoryPie
               data={statistics?.data}
@@ -84,6 +88,58 @@ const Overview = () => {
               cornerRadius={20}
               padding={gap}
             />
+
+            {/* 统计表图的数据展现 */}
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                marginLeft: 24,
+                marginBottom: 24,
+              }}>
+              {statistics?.data
+                .filter(datum => datum.y)
+                .map((datum, index) => {
+                  return (
+                    <View
+                      key={datum.x}
+                      style={{
+                        flexBasis: '50%',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginBottom: 8,
+                      }}>
+                      {/* 分组颜色 */}
+                      <View
+                        style={{
+                          width: 12,
+                          height: 12,
+                          backgroundColor: statistics?.colorScale[index],
+                          borderRadius: 4,
+                        }}
+                      />
+
+                      {/* 分组名称 */}
+                      <Text
+                        style={{
+                          marginHorizontal: 8,
+                          fontSize: 12,
+                        }}>
+                        {datum.title}
+                      </Text>
+
+                      {/* 分组金额 */}
+                      <Text
+                        style={{
+                          fontSize: 12,
+                        }}>
+                        {`¥ ${datum.y}`}
+                      </Text>
+                    </View>
+                  );
+                })}
+            </View>
+
             {/* 交易明细 */}
             <View
               style={{
