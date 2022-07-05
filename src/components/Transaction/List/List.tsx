@@ -1,4 +1,5 @@
 import {useLazyQuery} from '@apollo/client';
+import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-paper';
@@ -11,6 +12,7 @@ import TransactionCard from '../Card';
 
 const List = (props: Props) => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const [transactions, setTransactions] = useState<Transaction[]>();
   const [page, setPage] = useState(1);
@@ -44,10 +46,16 @@ const List = (props: Props) => {
    * 页面呈现时请求数据
    */
   useEffect(() => {
+    if (!isFocused) {
+      return;
+    }
+
     fetchTransactions()
       .catch(() => null)
       .then(res => setTransactions(res?.data?.transactions.items));
-  }, [fetchTransactions]);
+
+    setPage(1);
+  }, [isFocused, fetchTransactions, directions]);
 
   /**
    * 渲染交易
@@ -116,8 +124,6 @@ const List = (props: Props) => {
     } else {
       setDirections([...directions, value as Direction]);
     }
-
-    setPage(1);
   };
 
   /**
